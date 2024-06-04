@@ -35,7 +35,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ snippetId }) => {
         <input
           type="text"
           placeholder="Add a comment..."
-          className="input input-bordered w-full"
+          className="input input-ghost w-full border-b-gray-400 rounded-none"
         />
         <button className="btn btn-outline">Comment</button>
       </div>

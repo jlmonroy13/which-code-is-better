@@ -45,11 +45,10 @@ const Comment: React.FC<CommentProps> = ({
               className="btn btn-ghost btn-circle btn-sm"
               onClick={onLike}
             >
-              <AiOutlineLike size={23} />
+              <AiOutlineLike size={20} />
             </button>
             <span className="text-gray-400">35</span>
           </div>
-          <button className="btn btn-ghost btn-sm">Reply</button>
         </div>
       </div>
     </div>
