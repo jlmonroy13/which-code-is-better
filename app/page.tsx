@@ -1,4 +1,4 @@
-"use client";
+import { getRumble } from "@/utils/api/rumble";
 import cx from "classnames";
 import { Orbitron } from "next/font/google";
 import Head from "next/head";
@@ -8,40 +8,21 @@ import CommentsSection from "../components/CommentsSection";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 
-const snippet1 = `async function fetchUserData(userId) {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users/" + userId);
-    const userData = await response.json();
-    console.log(userData);
-  } catch (error) {
-    console.error('Error fetching user data:', error);
-  }
-};`;
+const Home: React.FC = async () => {
+  const rumble = await getRumble("665fa896bf97cd67b29ae4a7");
 
-const snippet2 = `function fetchUserData(userId) {
-  fetch("https://jsonplaceholder.typicode.com/users/" + userId)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((userData) => {
-      console.log(userData);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
-};`;
+  if (!rumble) return null;
 
-const Home: React.FC = () => {
-  const handleVoteSnippet1 = (): void => {
-    console.log("Voted for Snippet 1");
-  };
+  const { snippets } = rumble;
+  const [snippet1, snippet2] = snippets;
 
-  const handleVoteSnippet2 = (): void => {
-    console.log("Voted for Snippet 2");
-  };
+  // const handleVoteSnippet1 = (): void => {
+  //   console.log("Voted for Snippet 1");
+  // };
+
+  // const handleVoteSnippet2 = (): void => {
+  //   console.log("Voted for Snippet 2");
+  // };
 
   return (
     <div className="min-h-screen bg-base-100">
@@ -63,17 +44,17 @@ const Home: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 relative">
           <CodeSnippet
             className="ml-auto"
-            code={snippet1}
+            code={snippet1.code}
             containerClassName="bg-gradient-to-t from-red-500 to-base-100"
-            language="javascript"
-            onVote={handleVoteSnippet1}
+            language={snippet1.language}
+            // onVote={handleVoteSnippet1}
           />
           <CodeSnippet
             className="mr-auto"
-            code={snippet2}
+            code={snippet2.code}
             containerClassName="bg-gradient-to-t from-blue-500 to-base-100"
-            language="javascript"
-            onVote={handleVoteSnippet2}
+            language={snippet2.language}
+            // onVote={handleVoteSnippet2}
           />
           <Image
             src="/vs.png"

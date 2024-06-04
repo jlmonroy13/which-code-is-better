@@ -8,7 +8,7 @@ interface CodeSnippetProps {
   code: string;
   containerClassName?: string;
   language: string;
-  onVote: () => void;
+  onVote?: () => void;
 }
 
 const CodeSnippet: React.FC<CodeSnippetProps> = ({

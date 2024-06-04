@@ -29,16 +29,14 @@ if (process.env.NODE_ENV === "development") {
     globalWithMongo._mongoClientPromise = client.connect();
   }
   clientPromise = globalWithMongo._mongoClientPromise;
-  clientPromise
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error(err));
+    clientPromise
+      .then(() => console.log("MongoDB arajo connected"))
+      .catch((err) => console.error(err));
 } else {
   // In production mode, it's best to not use a global variable.
   client = new MongoClient(uri, options);
   clientPromise = client.connect();
-  clientPromise
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error(err));
+  clientPromise.then(() => console.log("MongoDB arajo connected")).catch((err) => console.error(err));
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
