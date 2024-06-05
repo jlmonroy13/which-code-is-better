@@ -1,7 +1,6 @@
 import { getRumble } from "@/utils/api/rumble";
 import cx from "classnames";
-import { Orbitron } from "next/font/google";
-import Head from "next/head";
+import { Orbitron } from "next/font/google"
 import Image from "next/image";
 import CodeSnippet from "../components/CodeSnippet";
 import CommentsSection from "../components/CommentsSection";
@@ -26,12 +25,6 @@ const Home: React.FC = async () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Head>
-        <title>Which Code Is Better?</title>
-        <meta name="description" content="Daily code snippet comparisons" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className="mx-auto">
         <h1
           className={cx(
