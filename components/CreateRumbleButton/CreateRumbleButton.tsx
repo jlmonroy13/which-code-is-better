@@ -1,4 +1,5 @@
 "use client";
+import { getCurrentDate } from "@/utils/date";
 import useSWRMutation from "swr/mutation";
 
 const postData = (url: string, { arg }: { arg: object }) => {
@@ -48,7 +49,10 @@ const CreateRumbleButton = () => {
   const { trigger } = useSWRMutation("/api/rumble", postData);
 
   const onClick = async () => {
-    trigger(rumbleData);
+    trigger({
+      ...rumbleData,
+      rumbleDay: getCurrentDate(),
+    });
   };
 
   return (

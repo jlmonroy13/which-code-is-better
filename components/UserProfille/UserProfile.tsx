@@ -1,5 +1,3 @@
-import { signOut } from "@/actions/signOutAction";
-import { User } from "@/types/user";
 import { ROUTES } from "@/routes";
 import {
   Menu,
@@ -8,10 +6,12 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
+import { User } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
+import { useAuth } from "@/context/authContext";
 // import logo from "../../public/logo.svg";
 
 interface UserProfileProps {
@@ -22,6 +22,7 @@ const AUTH_ROUTES = Object.values(ROUTES.AUTH);
 
 const UserProfile = ({ user }: UserProfileProps) => {
   const pathname = usePathname();
+  const { signOut } = useAuth();
 
   if (AUTH_ROUTES.includes(pathname)) return null;
 
@@ -44,7 +45,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
           <span className="sr-only">Open user menu</span>
           <Image
             className="rounded-full"
-            src={user?.image || ''}
+            src={user?.image || ""}
             alt="Image of user profile"
             width={32}
             height={32}
@@ -72,7 +73,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
           <MenuItem>
             <button
               className="block w-full px-4 py-2 text-left text-sm text-gray-700"
-              onClick={() => signOut()}
+              onClick={signOut}
             >
               Sign out
             </button>

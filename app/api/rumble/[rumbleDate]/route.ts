@@ -4,16 +4,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { rumbleDate: string } }
 ) {
   try {
-    const { id } = params;
+    const { rumbleDate } = params;
     const data = await request.json();
 
     await connectMongoDB();
-    const updatedRumble = await Rumble.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+    const updatedRumble = await Rumble.findOneAndUpdate(
+      { rumbleDay: rumbleDate },
+      data,
+      {
+        new: true,
+      }
+    );
     if (!updatedRumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -34,12 +38,12 @@ export async function PUT(
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { rumbleDate: string } }
 ) {
   try {
-    const { id } = params;
+    const { rumbleDate } = params;
     await connectMongoDB();
-    const rumble = await Rumble.findById(id);
+    const rumble = await Rumble.findOne({ rumbleDay: rumbleDate });
     if (!rumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -57,12 +61,12 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { rumbleDate: string } }
 ) {
   try {
-    const { id } = params;
+    const { rumbleDate } = params;
     await connectMongoDB();
-    const result = await Rumble.findByIdAndDelete(id);
+    const result = await Rumble.findOneAndDelete({ rumbleDay: rumbleDate });
     if (!result) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -80,16 +84,21 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { rumbleDate: string } }
 ) {
   try {
-    const { id } = params;
+    const { rumbleDate } = params;
     const data = await request.json();
 
     await connectMongoDB();
-    const updatedRumble = await Rumble.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+    const updatedRumble = await Rumble.findOneAndUpdate(
+      { rumbleDay: rumbleDate },
+      data,
+      {
+        new: true,
+      }
+    );
+
     if (!updatedRumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -97,7 +106,7 @@ export async function PATCH(
       );
     }
     return NextResponse.json(
-      { message: "Rumble updated", rumble: updatedRumble },
+      updatedRumble,
       { status: 200 }
     );
   } catch (error) {

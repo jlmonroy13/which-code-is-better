@@ -1,10 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
 const userSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -17,6 +13,7 @@ const userSchema = new Schema({
   image: {
     type: String,
   },
+  emailVerified: { type: Boolean, default: false },
 });
 
 const User = models?.User || model("User", userSchema);

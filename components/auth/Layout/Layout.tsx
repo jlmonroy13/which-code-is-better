@@ -12,12 +12,13 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const pathname = usePathname();
   const { title, description }  = useMemo(() => {
+    console.log("pathname", pathname);
     switch (pathname) {
       case ROUTES.AUTH.LOGIN:
         return {
-          title: 'Log in',
+          title: "Log in",
           description:
-            "Access your account, continue your coding journey, and tackle real-world bugs with confidence",
+            "Access your account to vote on code snippets, share your insights, and join our coding community.",
         };
       case ROUTES.AUTH.VERIFY_REQUEST:
         return {

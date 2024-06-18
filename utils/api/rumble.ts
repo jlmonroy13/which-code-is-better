@@ -1,16 +1,30 @@
-"use server";
-
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
-export const getRumble = async (rumbleId: string): Promise<RumbleInterface | null> => {
+export const RUMBLE_URL = (rumbleDate: string) => `/api/rumble/${rumbleDate}`;
+
+export const getRumbleByDate = async (rumbleDate: string): Promise<RumbleInterface | null> => {
   if (process.env.NODE_ENV === "development") {
-    const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleId}`);
+    const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleDate}`);
     return res.json();
   }
   await connectMongoDB();
-  return Rumble.findById(rumbleId);
+  return Rumble.findOne({ rumbleDay: rumbleDate });
+};
+
+export const updateRumbleFetcher = async (
+  url: string,
+  { arg }: { arg: Partial<RumbleInterface> }
+): Promise<RumbleInterface> => {
+  const rumbleRes = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(arg),
+  });
+  return rumbleRes.json();
 };
