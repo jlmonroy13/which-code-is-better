@@ -1,5 +1,6 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
+import User from "@/models/user";
 import { RumbleInterface } from "@/types/rumble";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
@@ -28,3 +29,21 @@ export const updateRumbleFetcher = async (
   });
   return rumbleRes.json();
 };
+
+export const getCommentsWithUserData = async (rumble: RumbleInterface) => {
+  const commentsWithUserData = [];
+
+  for (const comment of rumble.comments) {
+    const user = await User.findById(comment.userId);
+
+    if (user) {
+      commentsWithUserData.push({
+        ...comment,
+        userId: comment.userId,
+        userName: user.name,
+        userImage: user.image,
+      });
+    }
+  }
+  return commentsWithUserData;
+}

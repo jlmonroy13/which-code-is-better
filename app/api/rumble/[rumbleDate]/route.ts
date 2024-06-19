@@ -1,5 +1,6 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
+import { getCommentsWithUserData } from "@/utils/api/rumble";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -50,6 +51,7 @@ export async function GET(
         { status: 404 }
       );
     }
+    rumble.comments = await getCommentsWithUserData(rumble);
     return NextResponse.json(rumble, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -105,6 +107,7 @@ export async function PATCH(
         { status: 404 }
       );
     }
+    updatedRumble.comments = await getCommentsWithUserData(updatedRumble);
     return NextResponse.json(
       updatedRumble,
       { status: 200 }

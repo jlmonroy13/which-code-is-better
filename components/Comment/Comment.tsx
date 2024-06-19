@@ -5,7 +5,7 @@ import { AiOutlineLike } from "react-icons/ai";
 
 interface CommentProps {
   username: string;
-  timestamp: number;
+  timestamp: Date;
   avatarUrl: string;
   text: string;
   onLike: () => void;

@@ -7,6 +7,8 @@ export interface SnippetInterface {
 export interface CommentInterface {
   _id?: string;
   userId: string;
+  userImage?: string;
+  userName?: string;
   text: string;
   createdAt?: Date;
 }

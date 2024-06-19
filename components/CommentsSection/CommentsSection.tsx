@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Comment from "../Comment";
 import { useAuth } from "@/context/authContext";
+import { useRumble } from "@/context/rumbleContext";
 
 interface CommentsSectionProps {
   hasVoted: boolean;
@@ -9,28 +10,37 @@ interface CommentsSectionProps {
 
 const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
   const { user } = useAuth();
+  const { rumble, updateRumble, isUpdating: isCommenting } = useRumble();
   const isCommentDisabled = !user || !hasVoted;
-  const [comments, setComments] = useState([
-    {
-      id: "1",
-      username: "User1",
-      text: "This is really cool!",
-      avatarUrl: "https://i.pravatar.cc/150?img=5",
-      timestamp: 1717372325231,
-    },
-    {
-      id: "2",
-      username: "User2",
-      text: "Thanks for sharing!",
-      avatarUrl: "https://i.pravatar.cc/150?img=6",
-      timestamp: 1717372325231,
-    },
-  ]);
+  const [comments, setComments] = useState(rumble?.comments || []);
+  const [comment, setComment] = useState('');
 
   const handleLike = (id: string) => {
     console.log("Liked comment with id:", id);
     // Here you would handle the like logic, possibly updating state or sending an update to a backend
   };
+
+  useEffect(() => {
+    if (!rumble?.comments?.length) return;
+    setComments(rumble?.comments || []);
+  }, [rumble?.comments]);
+
+  const handleComment = async () => {
+    if (user && comment) {
+      const newComment = {
+        userId: user._id,
+        text: comment,
+      };
+      await updateRumble({
+        ...rumble,
+        comments: [
+          ...(rumble?.comments || []),
+          newComment,
+        ]
+      });
+      setComment('');
+    }
+  }
 
   const onRenderComments = () => {
     if (!user) {
@@ -50,12 +60,12 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
     }
     return comments.map((comment) => (
       <Comment
-        key={comment.id}
-        username={comment.username}
+        key={comment._id}
+        username={comment.userName || "Anonymous"}
         text={comment.text}
-        avatarUrl={comment.avatarUrl}
-        onLike={() => handleLike(comment.id)}
-        timestamp={comment.timestamp}
+        avatarUrl={comment.userImage || ""}
+        onLike={() => !!comment?._id && handleLike(comment._id)}
+        timestamp={comment.createdAt || new Date()}
       />
     ));
   }
@@ -67,9 +77,15 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
           type="text"
           placeholder="Add a comment..."
           className="input input-ghost w-full border-b-gray-400 rounded-none"
-          disabled={isCommentDisabled}
+          disabled={isCommentDisabled || isCommenting}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
         />
-        <button className="btn btn-outline" disabled={isCommentDisabled}>
+        <button
+          className="btn btn-outline"
+          disabled={isCommentDisabled || isCommenting}
+          onClick={handleComment}
+        >
           Comment
         </button>
       </div>
