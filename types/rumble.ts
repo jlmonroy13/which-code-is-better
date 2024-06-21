@@ -10,6 +10,7 @@ export interface CommentInterface {
   userImage?: string;
   userName?: string;
   text: string;
+  likes: string[];
   createdAt?: Date;
 }
 

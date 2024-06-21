@@ -8,14 +8,42 @@ interface useCommentsProps {
 
 const useComments = ({ hasVoted }: useCommentsProps) => {
   const { user } = useAuth();
-  const { rumble, updateRumble, isUpdating } = useRumble();
+  const { rumble, updateRumble } = useRumble();
+  const [isLiking, setIsLiking] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const isCommentDisabled = !user || !hasVoted;
   const [comments, setComments] = useState(rumble?.comments || []);
   const [comment, setComment] = useState("");
 
-  const handleLike = (id: string) => {
-    console.log("Liked comment with id:", id);
-    // Here you would handle the like logic, possibly updating state or sending an update to a backend
+  const handleLike = async (commentId: string) => {
+    if (!user || !rumble) return null;
+    try {
+      setIsLiking(true);
+      const updatedComments = rumble.comments.map((comment) => {
+        if (comment._id === commentId) {
+          if (comment.likes.includes(user._id)) {
+            return {
+              ...comment,
+              likes: comment.likes.filter((like) => like !== user._id),
+            };
+          }
+          return {
+            ...comment,
+            likes: [...comment.likes, user._id],
+          };
+        }
+        return comment;
+      });
+      await updateRumble({
+        ...rumble,
+        comments: updatedComments,
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLiking(false);
+    }
   };
 
   useEffect(() => {
@@ -25,23 +53,37 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
 
   const handleSubmitComment = async () => {
     if (!user || !comment) return null;
-    const newComment = {
-      userId: user._id,
-      text: comment,
-    };
-    await updateRumble({
-      ...rumble,
-      comments: [...(rumble?.comments || []), newComment],
-    });
-    setComment("");
+    try {
+      const newComment = {
+        userId: user._id,
+        text: comment,
+        likes: [],
+      };
+      await updateRumble({
+        ...rumble,
+        comments: [newComment, ...(rumble?.comments || [])],
+      });
+      setComment("");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsCommenting(false);
+    }
   };
 
-  const handleDeleteComment = (commentId: string) => {
+  const handleDeleteComment = async (commentId: string) => {
     if (!rumble || !commentId) return null;
-    updateRumble({
-      ...rumble,
-      comments: rumble.comments.filter((comment) => comment._id !== commentId),
-    });
+    try {
+      setIsDeleting(true);
+      await updateRumble({
+        ...rumble,
+        comments: rumble.comments.filter((comment) => comment._id !== commentId),
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleInputComment = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +95,9 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
     comments,
     comment,
     isCommentDisabled,
-    isUpdating,
+    isLiking,
+    isCommenting,
+    isDeleting,
     handleSubmitComment,
     handleDeleteComment,
     handleInputComment,

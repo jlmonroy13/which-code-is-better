@@ -13,7 +13,9 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
     comments,
     comment,
     isCommentDisabled,
-    isUpdating,
+    isLiking,
+    isCommenting,
+    isDeleting,
     handleSubmitComment,
     handleInputComment,
     handleDeleteComment,
@@ -29,13 +31,13 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
           type="text"
           placeholder="Add a comment..."
           className="input input-ghost w-full border-b-gray-400 rounded-none"
-          disabled={isCommentDisabled || isUpdating}
+          disabled={isCommentDisabled || isCommenting}
           value={comment}
           onChange={handleInputComment}
         />
         <button
           className="btn btn-outline"
-          disabled={isCommentDisabled || isUpdating || !comment}
+          disabled={isCommentDisabled || isCommenting || !comment}
           onClick={handleSubmitComment}
         >
           Comment
@@ -57,11 +59,13 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
               username={comment.userName || "Anonymous"}
               text={comment.text}
               avatarUrl={comment.userImage || ""}
-              onLike={() => handleLike(comment._id || '')}
-              onDelete={() => handleDeleteComment(comment._id || "")}
+              onLike={() => !isLiking && handleLike(comment._id || "")}
+              onDelete={() => !isDeleting && handleDeleteComment(comment._id || "")}
               timestamp={comment.createdAt || new Date()}
               isOwner={comment.userId === user._id}
-              isUpdating={isUpdating}
+              isDeleting={isDeleting}
+              hasLiked={comment.likes?.includes(user._id)}
+              likes={comment.likes?.length || 0}
             />
           ))
         )}

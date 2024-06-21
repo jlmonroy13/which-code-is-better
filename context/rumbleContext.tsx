@@ -1,10 +1,11 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { getFetcher } from "@/utils/api/fetcher";
 import { RumbleInterface } from "@/types/rumble";
 import { RUMBLE_URL, updateRumbleFetcher } from "@/utils/api/rumble";
+import { useAuth } from "./authContext";
 
 interface RumbleContextProps {
   rumble: RumbleInterface | null;
@@ -21,6 +22,7 @@ interface RumbleProviderProps {
 }
 
 export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
+  const { user } = useAuth();
   const [_rumble, setRumble] = useState<RumbleInterface | null>(rumble);
   const { trigger: getRumble } = useSWRMutation<RumbleInterface>(
     RUMBLE_URL(_rumble?.rumbleDay || ""),
@@ -41,6 +43,12 @@ export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
     setRumble(res);
     return res;
   };
+
+  useEffect(() => {
+    if (!user) return;
+    refetchRumble();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <RumbleContext.Provider
