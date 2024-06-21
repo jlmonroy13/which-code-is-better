@@ -83,7 +83,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
         />
         <button
           className="btn btn-outline"
-          disabled={isCommentDisabled || isCommenting}
+          disabled={isCommentDisabled || isCommenting || !comment}
           onClick={handleComment}
         >
           Comment

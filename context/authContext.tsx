@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { User } from '@/types/user';
+import { UserInterface } from '@/types/user';
 import useSWRMutation from "swr/mutation";
 import { getFetcher } from "@/utils/api/fetcher";
 import { USER_URL, updateUserFetcher } from "@/utils/api/user";
@@ -10,24 +10,24 @@ import { Session } from "next-auth";
 
 
 interface AuthContextProps {
-  user?: User | null;
+  user?: UserInterface | null;
   session?: Session | null;
   refetchUser: () => void;
   signOut: () => void;
-  updateUser: (arg: Partial<User>) => Promise<User>;
+  updateUser: (arg: Partial<UserInterface>) => Promise<UserInterface>;
 }
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
 
 interface AuthProviderProps {
-  user: User | null;
+  user: UserInterface | null;
   session: Session | null;
   children: React.ReactNode;
 }
 
 export const AuthProvider = ({ children, user, session }: AuthProviderProps) => {
-  const [_user, setUser] = useState<User | null>(user);
-  const { trigger: getUser } = useSWRMutation<User>(
+  const [_user, setUser] = useState<UserInterface | null>(user);
+  const { trigger: getUser } = useSWRMutation<UserInterface>(
     USER_URL(_user?._id || ""),
     getFetcher,
   );
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children, user, session }: AuthProviderProps) => 
     setUser(res);
   }
 
-  const updateUser = async (arg: Partial<User>) => {
+  const updateUser = async (arg: Partial<UserInterface>) => {
     const res = await updateUserTrigger(arg);
     setUser(res);
     return res;

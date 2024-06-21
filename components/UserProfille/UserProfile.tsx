@@ -6,7 +6,7 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { User } from "@/types/user";
+import { UserInterface } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,7 +15,7 @@ import { useAuth } from "@/context/authContext";
 // import logo from "../../public/logo.svg";
 
 interface UserProfileProps {
-  user?: User | null;
+  user?: UserInterface | null;
 }
 
 const AUTH_ROUTES = Object.values(ROUTES.AUTH);

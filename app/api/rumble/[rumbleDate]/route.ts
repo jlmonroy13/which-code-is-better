@@ -1,6 +1,7 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
-import { getCommentsWithUserData } from "@/utils/api/rumble";
+import { RumbleInterface } from "@/types/rumble";
+import { populateUserOnRumbleComments } from "@/utils/api/rumble";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -25,10 +26,12 @@ export async function PUT(
         { status: 404 }
       );
     }
-    return NextResponse.json(
-      { message: "Rumble updated", rumble: updatedRumble },
-      { status: 200 }
-    );
+
+    // Merge populated data with original user ID
+    const modifiedRumble: RumbleInterface = updatedRumble.toObject();
+    modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
+
+    return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating rumble", error },
@@ -38,22 +41,32 @@ export async function PUT(
 }
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { rumbleDate: string } }
 ) {
   try {
     const { rumbleDate } = params;
     await connectMongoDB();
-    const rumble = await Rumble.findOne({ rumbleDay: rumbleDate });
+    const rumble = await Rumble.findOne({ rumbleDay: rumbleDate })
+      .populate({
+        path: "comments.userId",
+        select: "name image",
+      })
+      .exec();
+
     if (!rumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }
       );
     }
-    rumble.comments = await getCommentsWithUserData(rumble);
-    return NextResponse.json(rumble, { status: 200 });
+    // Merge populated data with original user ID
+    const modifiedRumble: RumbleInterface = rumble.toObject();
+    modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
+
+    return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
+    console.error('error', error)
     return NextResponse.json(
       { message: "Error fetching rumble", error },
       { status: 500 }
@@ -62,7 +75,7 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { rumbleDate: string } }
 ) {
   try {
@@ -99,7 +112,12 @@ export async function PATCH(
       {
         new: true,
       }
-    );
+    )
+      .populate({
+        path: "comments.userId",
+        select: "name image",
+      })
+      .exec();
 
     if (!updatedRumble) {
       return NextResponse.json(
@@ -107,11 +125,12 @@ export async function PATCH(
         { status: 404 }
       );
     }
-    updatedRumble.comments = await getCommentsWithUserData(updatedRumble);
-    return NextResponse.json(
-      updatedRumble,
-      { status: 200 }
-    );
+
+    // Merge populated data with original user ID
+    const modifiedRumble: RumbleInterface = updatedRumble.toObject();
+    modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
+
+    return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating rumble", error },

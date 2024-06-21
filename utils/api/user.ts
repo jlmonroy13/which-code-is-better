@@ -1,6 +1,6 @@
 import connectMongoDB from "@/libs/mongodb";
 import User from "@/models/user";
-import { User as UserInterface } from "@/types/user";
+import { UserInterface } from "@/types/user";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 

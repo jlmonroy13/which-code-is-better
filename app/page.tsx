@@ -1,5 +1,5 @@
 "use client";
-import { getRumbleByDate } from "@/utils/api/rumble";
+
 import cx from "classnames";
 import { Orbitron } from "next/font/google"
 import Image from "next/image";
