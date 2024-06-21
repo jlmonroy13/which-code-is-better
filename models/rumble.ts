@@ -6,6 +6,7 @@ const commentSchema = new Schema({
   userName: { type: String },
   text: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
+  likes: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
 });
 
 const codeSnippetSchema = new Schema({

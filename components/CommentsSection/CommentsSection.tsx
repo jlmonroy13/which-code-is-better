@@ -10,7 +10,7 @@ interface CommentsSectionProps {
 
 const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
   const { user } = useAuth();
-  const { rumble, updateRumble, isUpdating: isCommenting } = useRumble();
+  const { rumble, updateRumble, isUpdating } = useRumble();
   const isCommentDisabled = !user || !hasVoted;
   const [comments, setComments] = useState(rumble?.comments || []);
   const [comment, setComment] = useState('');
@@ -26,20 +26,27 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
   }, [rumble?.comments]);
 
   const handleComment = async () => {
-    if (user && comment) {
-      const newComment = {
-        userId: user._id,
-        text: comment,
-      };
-      await updateRumble({
-        ...rumble,
-        comments: [
-          ...(rumble?.comments || []),
-          newComment,
-        ]
-      });
-      setComment('');
-    }
+    if (!user || !comment) return null;
+    const newComment = {
+      userId: user._id,
+      text: comment,
+    };
+    await updateRumble({
+      ...rumble,
+      comments: [
+        ...(rumble?.comments || []),
+        newComment,
+      ]
+    });
+    setComment('');
+  }
+
+  const handleDeleteComment = (commentId: string) => {
+    if (!rumble || !commentId) return null;
+    updateRumble({
+      ...rumble,
+      comments: rumble.comments.filter((comment) => comment._id !== commentId),
+    });
   }
 
   const onRenderComments = () => {
@@ -65,7 +72,10 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
         text={comment.text}
         avatarUrl={comment.userImage || ""}
         onLike={() => !!comment?._id && handleLike(comment._id)}
+        onDelete={() => handleDeleteComment(comment._id || "")}
         timestamp={comment.createdAt || new Date()}
+        isOwner={comment.userId === user._id}
+        isUpdating={isUpdating}
       />
     ));
   }
@@ -77,13 +87,13 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
           type="text"
           placeholder="Add a comment..."
           className="input input-ghost w-full border-b-gray-400 rounded-none"
-          disabled={isCommentDisabled || isCommenting}
+          disabled={isCommentDisabled || isUpdating}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <button
           className="btn btn-outline"
-          disabled={isCommentDisabled || isCommenting || !comment}
+          disabled={isCommentDisabled || isUpdating || !comment}
           onClick={handleComment}
         >
           Comment
