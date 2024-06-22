@@ -1,12 +1,12 @@
 "use client";
 
+import { useAuth } from "@/context/authContext";
+import { useRumble } from "@/context/rumbleContext";
 import cx from "classnames";
-import { Orbitron } from "next/font/google"
+import { Orbitron } from "next/font/google";
 import Image from "next/image";
 import CodeSnippet from "../components/CodeSnippet";
 import CommentsSection from "../components/CommentsSection";
-import { useAuth } from "@/context/authContext";
-import { useRumble } from "@/context/rumbleContext";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
 
@@ -17,7 +17,9 @@ const Home: React.FC = () => {
   if (!rumble?._id) return null;
   const { snippets } = rumble;
   const [snippet1, snippet2] = snippets;
-  const userVote = rumble.votes.find(({ userId }) => userId === session?.user?.id);
+  const userVote = rumble.votes.find(
+    ({ userId }) => userId === session?.user?.id
+  );
   const hasVotedSnipped1 = userVote?.snippetId === snippet1._id;
   const hasVotedSnipped2 = userVote?.snippetId === snippet2._id;
 
@@ -32,6 +34,10 @@ const Home: React.FC = () => {
         >
           Which Code Is Better?
         </h1>
+        <div className="max-w-2xl text-center text-neutral-300 mx-auto px-6">
+          Click on the code snippet you think is better to cast your vote, and
+          don&apos;t forget to check the comments section.
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 relative">
           {snippet1._id && (
             <CodeSnippet
@@ -58,7 +64,7 @@ const Home: React.FC = () => {
             width={70}
             height={70}
             alt="vs"
-            className="absolute right-1/2 translate-x-1/2 bottom-1/2"
+            className="absolute right-1/2 translate-x-1/2 bottom-1/2 z-20"
           />
         </div>
         <div className="max-w-[1280px] mx-auto p-6">
