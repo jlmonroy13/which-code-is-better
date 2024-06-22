@@ -3,6 +3,7 @@
 import { UserInterface } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
+import Countdown from "react-countdown";
 import logo from "../../public/logo.svg";
 import UserProfile from "../UserProfille/UserProfile";
 
@@ -24,9 +25,17 @@ const Header = ({ user }: HeaderProps) => {
           />
         </Link>
       </nav>
-      <div className="flex items-center gap-4">
-        {user?.name || user?.email}
-        <UserProfile user={user} />
+      <div className="flex gap-14 items-center">
+        <div className="flex items-center gap-2">
+          Voting ends in:
+          <div className="rounded bg-primary px-2 py-1 text-base-100 font-medium min-w-[115px]">
+            <Countdown date={Date.now() + 10000000} />
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          {user?.name || user?.email}
+          <UserProfile user={user} />
+        </div>
       </div>
     </header>
   );
