@@ -1,13 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
-import { UserInterface } from '@/types/user';
-import useSWRMutation from "swr/mutation";
+import { signOut } from "@/actions/signOutAction";
+import { UserInterface } from "@/types/user";
 import { getFetcher } from "@/utils/api/fetcher";
 import { USER_URL, updateUserFetcher } from "@/utils/api/user";
-import { signOut } from "@/actions/signOutAction";
 import { Session } from "next-auth";
-
+import { createContext, useContext, useState } from "react";
+import useSWRMutation from "swr/mutation";
 
 interface AuthContextProps {
   user?: UserInterface | null;
@@ -25,11 +24,15 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider = ({ children, user, session }: AuthProviderProps) => {
+export const AuthProvider = ({
+  children,
+  user,
+  session,
+}: AuthProviderProps) => {
   const [_user, setUser] = useState<UserInterface | null>(user);
   const { trigger: getUser } = useSWRMutation<UserInterface>(
     USER_URL(_user?._id || ""),
-    getFetcher,
+    getFetcher
   );
   const { trigger: updateUserTrigger } = useSWRMutation(
     USER_URL(user?._id || ""),
@@ -39,19 +42,18 @@ export const AuthProvider = ({ children, user, session }: AuthProviderProps) => 
   const refetchUser = async () => {
     const res = await getUser();
     setUser(res);
-  }
+  };
 
   const updateUser = async (arg: Partial<UserInterface>) => {
     const res = await updateUserTrigger(arg);
     setUser(res);
     return res;
-  }
+  };
 
   const onSignOut = () => {
     setUser(null);
     signOut();
-  }
-
+  };
 
   return (
     <AuthContext.Provider

@@ -7,8 +7,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useState
 } from "react";
 import useSWRMutation from "swr/mutation";
 import { useAuth } from "./authContext";
@@ -47,11 +46,6 @@ export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
     setRumble(res);
     return res;
   };
-
-  useEffect(() => {
-    if (!user) return;
-    refetchRumble();
-  }, [refetchRumble, user]);
 
   return (
     <RumbleContext.Provider

@@ -1,4 +1,6 @@
+import { useAuth } from "@/context/authContext";
 import { ROUTES } from "@/routes";
+import { UserInterface } from "@/types/user";
 import {
   Menu,
   MenuButton,
@@ -6,13 +8,10 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import { UserInterface } from "@/types/user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
-import { useAuth } from "@/context/authContext";
-// import logo from "../../public/logo.svg";
 
 interface UserProfileProps {
   user?: UserInterface | null;
@@ -30,7 +29,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
     return (
       <Link
         href="/auth/login"
-        className="rounded-md btn bg-primary px-6 py-2 text-sm text-neutral transition-colors hover:bg-primary/80"
+        className="rounded-md btn btn-secondary h-10 min-h-10"
       >
         Log in
       </Link>
