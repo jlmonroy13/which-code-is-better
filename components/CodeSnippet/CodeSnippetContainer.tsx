@@ -3,7 +3,7 @@
 import { useAuth } from "@/context/authContext";
 import { useRumble } from "@/context/rumbleContext";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import CodeSnippet from "./CodeSnippet";
 import { CodeSnippetProps } from "./CodeSnippet.types";
@@ -17,10 +17,25 @@ const CodeSnippetContainer: React.FC<
   const { rumble, updateRumble } = useRumble();
   const { id } = props;
 
+  const isRumbleActive = useMemo(() => {
+    if (!rumble?.rumbleDay) return false;
+
+    const inputDate = new Date(rumble.rumbleDay);
+
+    const today = new Date();
+    const utcToday = new Date(
+      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+    );
+
+    return inputDate.getTime() === utcToday.getTime();
+  }, [rumble?.rumbleDay]);
+
   const onVote = async () => {
     try {
       if (!user) {
         router.push("/auth/login");
+      } else if (!isRumbleActive) {
+        location.reload();
       } else if (rumble) {
         setIsVoting(true);
         let votes = rumble.votes;

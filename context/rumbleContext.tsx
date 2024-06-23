@@ -1,10 +1,16 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
-import useSWRMutation from "swr/mutation";
-import { getFetcher } from "@/utils/api/fetcher";
 import { RumbleInterface } from "@/types/rumble";
+import { getFetcher } from "@/utils/api/fetcher";
 import { RUMBLE_URL, updateRumbleFetcher } from "@/utils/api/rumble";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import useSWRMutation from "swr/mutation";
 import { useAuth } from "./authContext";
 
 interface RumbleContextProps {
@@ -28,15 +34,13 @@ export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
     RUMBLE_URL(_rumble?.rumbleDay || ""),
     getFetcher
   );
-  const { trigger: updateRumbleTrigger, isMutating: isUpdating } = useSWRMutation(
-    RUMBLE_URL(_rumble?.rumbleDay || ""),
-    updateRumbleFetcher
-  );
+  const { trigger: updateRumbleTrigger, isMutating: isUpdating } =
+    useSWRMutation(RUMBLE_URL(_rumble?.rumbleDay || ""), updateRumbleFetcher);
 
-  const refetchRumble = async () => {
+  const refetchRumble = useCallback(async () => {
     const res = await getRumble();
     setRumble(res);
-  };
+  }, [getRumble]);
 
   const updateRumble = async (arg: Partial<RumbleInterface>) => {
     const res = await updateRumbleTrigger(arg);
@@ -47,8 +51,7 @@ export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
   useEffect(() => {
     if (!user) return;
     refetchRumble();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [refetchRumble, user]);
 
   return (
     <RumbleContext.Provider
