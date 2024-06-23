@@ -1,10 +1,7 @@
 import { auth } from "@/auth";
 import Header from "@/components/Header";
 import { AuthProvider } from "@/context/authContext";
-import { RumbleProvider } from "@/context/rumbleContext";
-import { getRumbleByDate } from "@/utils/api/rumble";
 import { getUser } from "@/utils/api/user";
-import { getCurrentDate } from "@/utils/date";
 import cx from "classnames";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -26,8 +23,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   let user = null;
-  const todayDate = getCurrentDate();
-  const rumble = await getRumbleByDate(todayDate);
+
   const session = await auth();
   if (session?.user?.id) {
     user = await getUser(session.user.id);
@@ -39,15 +35,13 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <AuthProvider user={user} session={session}>
-        <RumbleProvider rumble={rumble}>
-          <body className={cx(inter.className, "bg-base-100")}>
-            <div className="relative flex min-h-svh flex-col">
-              <Header user={user} />
-              {children}
-            </div>
-            <ToastContainer hideProgressBar />
-          </body>
-        </RumbleProvider>
+        <body className={cx(inter.className, "bg-base-100")}>
+          <div className="relative min-h-svh flex-col grid grid-rows-[max-content_1fr]">
+            <Header user={user} />
+            {children}
+          </div>
+          <ToastContainer hideProgressBar />
+        </body>
       </AuthProvider>
     </html>
   );

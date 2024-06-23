@@ -1,11 +1,15 @@
 import Rumble from "@/components/Rumble";
 import { RumbleProvider } from "@/context/rumbleContext";
 import { getRumbleByDate } from "@/utils/api/rumble";
-import { getCurrentDate } from "@/utils/date";
 
-const Home: React.FC = async () => {
-  const todayDate = getCurrentDate();
-  const rumble = await getRumbleByDate(todayDate);
+interface RumblePageProps {
+  params: { rumbleDate: string };
+}
+
+const RumblePage: React.FC<RumblePageProps> = async ({
+  params: { rumbleDate },
+}) => {
+  const rumble = await getRumbleByDate(rumbleDate);
 
   return (
     <RumbleProvider rumble={rumble}>
@@ -14,4 +18,4 @@ const Home: React.FC = async () => {
   );
 };
 
-export default Home;
+export default RumblePage;
