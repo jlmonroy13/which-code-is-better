@@ -4,6 +4,7 @@ import { useAuth } from "@/context/authContext";
 import { useRumble } from "@/context/rumbleContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import CodeSnippet from "./CodeSnippet";
 import { CodeSnippetProps } from "./CodeSnippet.types";
 
@@ -16,7 +17,7 @@ const CodeSnippetContainer: React.FC<
   const { rumble, updateRumble } = useRumble();
   const { id } = props;
 
-  const onVote = () => {
+  const onVote = async () => {
     try {
       if (!user) {
         router.push("/auth/login");
@@ -39,13 +40,15 @@ const CodeSnippetContainer: React.FC<
             return vote;
           });
         }
-        updateRumble({
+        await updateRumble({
           ...rumble,
           votes,
         });
+        toast.success("Vote submitted successfully!");
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred, please try voting again.");
     } finally {
       setIsVoting(false);
     }

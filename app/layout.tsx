@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import cx from "classnames";
 import { auth } from "@/auth";
-import { getUser } from "@/utils/api/user";
+import Header from "@/components/Header";
 import { AuthProvider } from "@/context/authContext";
 import { RumbleProvider } from "@/context/rumbleContext";
-import { getCurrentDate } from "@/utils/date";
 import { getRumbleByDate } from "@/utils/api/rumble";
+import { getUser } from "@/utils/api/user";
+import { getCurrentDate } from "@/utils/date";
+import cx from "classnames";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,6 +45,7 @@ export default async function RootLayout({
               <Header user={user} />
               {children}
             </div>
+            <ToastContainer hideProgressBar />
           </body>
         </RumbleProvider>
       </AuthProvider>

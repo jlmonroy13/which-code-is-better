@@ -35,8 +35,10 @@ const Home: React.FC = () => {
           Which Code Is Better?
         </h1>
         <div className="max-w-2xl text-center text-neutral-300 mx-auto px-6">
-          <span className="underline">Click on the code snippet</span> you think is better to cast your vote, and
-          don&apos;t forget to check the comments section.
+          <span className="underline">
+            Click on the code snippet you think is best.
+          </span>{" "}
+          Feel free to leave a comment explaining your choice.
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 relative">
           {snippet1._id && (

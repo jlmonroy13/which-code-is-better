@@ -4,10 +4,10 @@ import { UserInterface } from "@/types/user";
 import { getNextMidnightUT } from "@/utils/date";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import logo from "../../public/logo.svg";
 import UserProfile from "../UserProfille/UserProfile";
-import { useEffect, useState } from "react";
 
 interface HeaderProps {
   user?: UserInterface | null;
