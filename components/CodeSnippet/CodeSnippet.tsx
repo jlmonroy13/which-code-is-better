@@ -16,7 +16,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = ({
     <div className={cx("h-full px-5 py-10", containerClassName)}>
       <div
         className={cx(
-          "card rounded-lg relative grid h-full",
+          "card rounded-lg relative grid h-full max-w-[595px]",
           className,
           {
             "gradient-border": hasVoted,
