@@ -18,7 +18,6 @@ export interface VoteInterface {
   _id?: string;
   userId: string;
   snippetId: string;
-  rumbleDay: string;
   createdAt?: Date;
 }
 

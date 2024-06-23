@@ -1,12 +1,15 @@
 "use client";
-import { useRouter } from "next/navigation";
-import CodeSnippet from "./CodeSnippet";
-import { CodeSnippetProps } from "./CodeSnippet.types";
+
 import { useAuth } from "@/context/authContext";
 import { useRumble } from "@/context/rumbleContext";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import CodeSnippet from "./CodeSnippet";
+import { CodeSnippetProps } from "./CodeSnippet.types";
 
-const CodeSnippetContainer: React.FC<Omit<CodeSnippetProps, 'onVote' | 'isVoting'>> = (props) => {
+const CodeSnippetContainer: React.FC<
+  Omit<CodeSnippetProps, "onVote" | "isVoting">
+> = (props) => {
   const router = useRouter();
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
@@ -24,7 +27,6 @@ const CodeSnippetContainer: React.FC<Omit<CodeSnippetProps, 'onVote' | 'isVoting
           votes.push({
             userId: user._id,
             snippetId: id,
-            rumbleDay: rumble.rumbleDay,
           });
         } else {
           votes = votes.map((vote) => {
@@ -47,8 +49,7 @@ const CodeSnippetContainer: React.FC<Omit<CodeSnippetProps, 'onVote' | 'isVoting
     } finally {
       setIsVoting(false);
     }
-  }
-
+  };
 
   return <CodeSnippet {...props} onVote={onVote} isVoting={isVoting} />;
 };

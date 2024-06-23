@@ -17,7 +17,6 @@ const codeSnippetSchema = new Schema({
 const voteSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   snippetId: { type: Schema.Types.ObjectId, ref: "CodeSnippet", required: true },
-  rumbleDay: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
