@@ -14,3 +14,16 @@ export const getNextMidnightUT = () => {
   nextMidnightUTC.setUTCHours(0, 0, 0, 0);
   return nextMidnightUTC;
 };
+
+export const isAfterToday = (dateStr: string) => {
+  const inputDate = new Date(dateStr + "T00:00:00Z");
+
+  const today = new Date();
+  const todayUTC = Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate()
+  );
+
+  return inputDate.getTime() > todayUTC;
+};

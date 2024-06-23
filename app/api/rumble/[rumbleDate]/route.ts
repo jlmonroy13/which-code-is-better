@@ -2,6 +2,7 @@ import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { populateUserOnRumbleComments } from "@/utils/api/rumble";
+import { isAfterToday } from "@/utils/date";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -54,7 +55,7 @@ export async function GET(
       })
       .exec();
 
-    if (!rumble) {
+    if (!rumble || isAfterToday(rumbleDate)) {
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }
@@ -66,7 +67,7 @@ export async function GET(
 
     return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
-    console.error('error', error)
+    console.error("error", error);
     return NextResponse.json(
       { message: "Error fetching rumble", error },
       { status: 500 }
