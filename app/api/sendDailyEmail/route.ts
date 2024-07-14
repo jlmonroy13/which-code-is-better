@@ -25,7 +25,7 @@ const sendEmail = async (results: VoteResult[]): Promise<void> => {
         .join("")}
     </ul>
   `;
-  console.log('process.env.AUTH_RESEND_KEY', process.env.AUTH_RESEND_KEY)
+  console.log('process.env.AUTH_RESEND_KEY //////////////////', process.env.AUTH_RESEND_KEY)
   try {
     await fetch("https://api.resend.com/emails", {
       method: "POST",
