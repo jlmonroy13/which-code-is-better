@@ -13,7 +13,10 @@ const fetchVoteResults = async (): Promise<VoteResult[]> => {
   ];
 };
 
-const sendEmail = async (results: VoteResult[]): Promise<void> => {
+const sendEmail = async (
+  recipient: string,
+  results: VoteResult[]
+): Promise<void> => {
   const emailBody = `
     <h1>Daily Vote Results</h1>
     <p>Here are the results for today:</p>
@@ -27,7 +30,8 @@ const sendEmail = async (results: VoteResult[]): Promise<void> => {
   `;
 
   try {
-    await fetch("https://api.resend.com/emails", {
+    console.log('recipient', recipient);
+    const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.AUTH_RESEND_KEY}`,
@@ -35,11 +39,22 @@ const sendEmail = async (results: VoteResult[]): Promise<void> => {
       },
       body: JSON.stringify({
         from: `Which code is Better <${process.env.AUTH_RESEND_FROM_EMAIL}>`,
-        to: "jlmonroy13@gmail.com, selvio89@hotmail.com",
+        to: recipient,
         subject: "Daily Vote Results",
         html: emailBody,
       }),
     });
+
+    const responseBody = await response.json();
+
+    if (!response.ok) {
+      console.error(
+        "Email sending failed with status",
+        response.status,
+        responseBody
+      );
+      throw new Error(`Email sending failed with status ${response.status}`);
+    }
   } catch (error) {
     console.error("Error sending email:", error);
   }
@@ -47,6 +62,17 @@ const sendEmail = async (results: VoteResult[]): Promise<void> => {
 
 export async function GET() {
   const results = await fetchVoteResults();
-  await sendEmail(results);
-  return NextResponse.json({ message: "Email sent successfully" });
+  const recipients = ["jlmonroy13@gmail.com", "selvio89@hotmail.com"];
+
+  try {
+    await Promise.all(
+      recipients.map((recipient) => sendEmail(recipient, results))
+    );
+    return NextResponse.json({ message: "Emails sent successfully" });
+  } catch (error) {
+    return NextResponse.json({
+      message: "Failed to send some emails",
+      error: error,
+    });
+  }
 }
