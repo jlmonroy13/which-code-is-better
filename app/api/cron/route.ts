@@ -62,8 +62,8 @@ const sendEmail = async (
 
 export async function GET() {
   const results = await fetchVoteResults();
-  const recipients = ["jlmonroy13@gmail.com", "selvio89@hotmail.com"];
-
+  const recipients = ["jlmonroy13@gmail.com"];
+  console.log('THIS IS A TEST');
   try {
     await Promise.all(
       recipients.map((recipient) => sendEmail(recipient, results))
