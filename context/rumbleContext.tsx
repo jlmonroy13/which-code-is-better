@@ -27,7 +27,6 @@ interface RumbleProviderProps {
 }
 
 export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
-  const { user } = useAuth();
   const [_rumble, setRumble] = useState<RumbleInterface | null>(rumble);
   const { trigger: getRumble } = useSWRMutation<RumbleInterface>(
     RUMBLE_URL(_rumble?.rumbleDay || ""),

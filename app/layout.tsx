@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+import ClientLayout from "@/components/ClientLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,10 +37,9 @@ export default async function RootLayout({
       </head>
       <AuthProvider user={user} session={session}>
         <body className={cx(inter.className, "bg-base-100")}>
-          <div className="relative min-h-svh flex-col grid grid-rows-[max-content_1fr]">
-            <Header user={user} />
+          <ClientLayout user={user}>
             {children}
-          </div>
+          </ClientLayout>
           <ToastContainer hideProgressBar />
         </body>
       </AuthProvider>

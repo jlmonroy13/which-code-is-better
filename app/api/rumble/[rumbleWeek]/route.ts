@@ -2,20 +2,20 @@ import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { populateUserOnRumbleComments } from "@/utils/api/rumble";
-import { isAfterToday } from "@/utils/date";
+import { isWeekPassed } from "@/utils/date";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { rumbleDate: string } }
+  { params }: { params: { rumbleWeek: string } }
 ) {
   try {
-    const { rumbleDate } = params;
+    const { rumbleWeek } = params;
     const data = await request.json();
 
     await connectMongoDB();
     const updatedRumble = await Rumble.findOneAndUpdate(
-      { rumbleDay: rumbleDate },
+      { rumbleWeek },
       data,
       {
         new: true,
@@ -43,19 +43,19 @@ export async function PUT(
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { rumbleDate: string } }
+  { params }: { params: { rumbleWeek: string } }
 ) {
   try {
-    const { rumbleDate } = params;
+    const { rumbleWeek } = params;
     await connectMongoDB();
-    const rumble = await Rumble.findOne({ rumbleDay: rumbleDate })
+    const rumble = await Rumble.findOne({ rumbleWeek })
       .populate({
         path: "comments.userId",
         select: "name image",
       })
       .exec();
 
-    if (!rumble || isAfterToday(rumbleDate)) {
+    if (!rumble || isWeekPassed(rumbleWeek)) {
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }
@@ -77,12 +77,12 @@ export async function GET(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { rumbleDate: string } }
+  { params }: { params: { rumbleWeek: string } }
 ) {
   try {
-    const { rumbleDate } = params;
+    const { rumbleWeek } = params;
     await connectMongoDB();
-    const result = await Rumble.findOneAndDelete({ rumbleDay: rumbleDate });
+    const result = await Rumble.findOneAndDelete({ rumbleWeek });
     if (!result) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -100,15 +100,15 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { rumbleDate: string } }
+  { params }: { params: { rumbleWeek: string } }
 ) {
   try {
-    const { rumbleDate } = params;
+    const { rumbleWeek } = params;
     const data = await request.json();
 
     await connectMongoDB();
     const updatedRumble = await Rumble.findOneAndUpdate(
-      { rumbleDay: rumbleDate },
+      { rumbleWeek },
       data,
       {
         new: true,

@@ -8,13 +8,13 @@ const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
 export const RUMBLE_URL = (rumbleDate: string) => `/api/rumble/${rumbleDate}`;
 
-export const getRumbleByDate = async (rumbleDate: string): Promise<RumbleInterface | null> => {
+export const getRumbleByWeek = async (rumbleWeek: string): Promise<RumbleInterface | null> => {
   if (process.env.NODE_ENV === "development") {
-    const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleDate}`);
+    const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleWeek}`);
     return res.json();
   }
   await connectMongoDB();
-  return Rumble.findOne({ rumbleDay: rumbleDate });
+  return Rumble.findOne({ rumbleWeek });
 };
 
 export const updateRumbleFetcher = async (

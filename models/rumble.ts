@@ -22,7 +22,7 @@ const voteSchema = new Schema({
 
 const rumbleSchema = new Schema({
   snippets: [codeSnippetSchema],
-  rumbleDay: { type: String, required: true, unique: true },
+  rumbleWeek: { type: String, required: true, unique: true },
   comments: [commentSchema],
   votes: [voteSchema],
   createdAt: { type: Date, default: Date.now },
