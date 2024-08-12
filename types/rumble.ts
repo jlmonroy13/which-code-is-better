@@ -24,7 +24,7 @@ export interface VoteInterface {
 export interface RumbleInterface {
   _id?: string;
   snippets: SnippetInterface[];
-  rumbleDay: string;
+  rumbleWeek: string;
   comments: CommentInterface[];
   votes: VoteInterface[];
   createdAt?: Date;

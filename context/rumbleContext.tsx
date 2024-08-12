@@ -29,11 +29,11 @@ interface RumbleProviderProps {
 export const RumbleProvider = ({ rumble, children }: RumbleProviderProps) => {
   const [_rumble, setRumble] = useState<RumbleInterface | null>(rumble);
   const { trigger: getRumble } = useSWRMutation<RumbleInterface>(
-    RUMBLE_URL(_rumble?.rumbleDay || ""),
+    RUMBLE_URL(_rumble?.rumbleWeek || ""),
     getFetcher
   );
   const { trigger: updateRumbleTrigger, isMutating: isUpdating } =
-    useSWRMutation(RUMBLE_URL(_rumble?.rumbleDay || ""), updateRumbleFetcher);
+    useSWRMutation(RUMBLE_URL(_rumble?.rumbleWeek || ""), updateRumbleFetcher);
 
   const refetchRumble = useCallback(async () => {
     const res = await getRumble();

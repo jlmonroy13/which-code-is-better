@@ -18,9 +18,9 @@ const CodeSnippetContainer: React.FC<
   const { id } = props;
 
   const isRumbleActive = useMemo(() => {
-    if (!rumble?.rumbleDay) return false;
+    if (!rumble?.rumbleWeek) return false;
 
-    const inputDate = new Date(rumble.rumbleDay);
+    const inputDate = new Date(rumble.rumbleWeek);
 
     const today = new Date();
     const utcToday = new Date(
@@ -28,7 +28,7 @@ const CodeSnippetContainer: React.FC<
     );
 
     return inputDate.getTime() === utcToday.getTime();
-  }, [rumble?.rumbleDay]);
+  }, [rumble?.rumbleWeek]);
 
   const onVote = async () => {
     try {

@@ -6,14 +6,24 @@ export async function POST(request: NextRequest) {
   try {
     await connectMongoDB();
     const data = await request.json();
-
     if (!data || Object.keys(data).length === 0) {
       return NextResponse.json(
         { message: "Invalid data provided" },
         { status: 400 }
       );
     }
-
+    if (!data.rumbleWeek) {
+      return NextResponse.json(
+        { message: "rumbleWeek is required" },
+        { status: 400 }
+      );
+    }
+    if (!data.title) {
+      return NextResponse.json(
+        { message: "title is required" },
+        { status: 400 }
+      );
+    }
     const rumble = await Rumble.create(data);
     return NextResponse.json(
       { message: "Rumble created", rumble },
