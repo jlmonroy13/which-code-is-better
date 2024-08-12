@@ -10,7 +10,6 @@ import {
   useState
 } from "react";
 import useSWRMutation from "swr/mutation";
-import { useAuth } from "./authContext";
 
 interface RumbleContextProps {
   rumble: RumbleInterface | null;

@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import cx from "classnames";
 import Link from "next/link";
+import { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
 interface SideMenuProps {
@@ -15,18 +16,26 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out ${
-          isVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        } z-40`}
+        className={cx(
+          "fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out z-40",
+          {
+            "opacity-100 pointer-events-auto": isVisible,
+            "opacity-0 pointer-events-none": !isVisible,
+          }
+        )}
         onClick={onClose}
       />
       <div
-        className={`fixed top-0 left-0 h-full bg-base-200 w-64 transition-all duration-300 ease-in-out transform ${
-          isVisible ? "translate-x-0" : "-translate-x-full"
-        } z-50`}
+        className={cx(
+          "fixed top-0 left-0 h-full bg-base-200 w-64 transition-all duration-300 ease-in-out transform z-50",
+          {
+            "translate-x-0": isVisible,
+            "-translate-x-full": !isVisible,
+          }
+        )}
       >
         <div className="flex justify-between items-center p-4">
-          <h2 className="text-xl font-bold">Explore Rumbles</h2>
+          <h1 className="text-xl font-bold">Explore Rumbles</h1>
           <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-base-300"
@@ -39,11 +48,10 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
             <li key={week} className="mb-2 px-4">
               <Link
                 href={`/${week}`}
-                className={`block p-2 rounded ${
-                  selectedWeek === week
-                    ? "bg-primary text-white"
-                    : "hover:bg-base-300"
-                }`}
+                className={cx("block p-2 rounded", {
+                  "bg-primary text-neutral": selectedWeek === week,
+                  "hover:bg-base-300": selectedWeek !== week,
+                })}
                 onClick={() => setSelectedWeek(week)}
               >
                 Week {week}

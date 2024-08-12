@@ -1,12 +1,11 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
-import User from "@/models/user";
 import { RumbleInterface } from "@/types/rumble";
 import { UserInterface } from "@/types/user";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
-export const RUMBLE_URL = (rumbleDate: string) => `/api/rumble/${rumbleDate}`;
+export const RUMBLE_URL = (rumbleWeek: string) => `/api/rumble/${rumbleWeek}`;
 
 export const getRumbleByWeek = async (rumbleWeek: string): Promise<RumbleInterface | null> => {
   if (process.env.NODE_ENV === "development") {

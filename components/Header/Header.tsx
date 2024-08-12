@@ -8,14 +8,12 @@ import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import logo from "../../public/logo.svg";
 import UserProfile from "../UserProfille/UserProfile";
-import { FaBars } from "react-icons/fa";
 
 interface HeaderProps {
   user?: UserInterface | null;
-  toggleSideMenu: () => void;
 }
 
-const Header = ({ user, toggleSideMenu }: HeaderProps) => {
+const Header = ({ user }: HeaderProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -34,12 +32,7 @@ const Header = ({ user, toggleSideMenu }: HeaderProps) => {
             height={42}
           />
         </Link>
-        <button
-          onClick={toggleSideMenu}
-          className="flex items-center gap-2 bg-primary text-base-100 px-3 py-2 rounded hover:bg-primary-focus"
-        >
-          <FaBars /> Show previous rumbles
-        </button>
+
       </nav>
       <div className="flex gap-14 items-center">
           <div className="flex items-center gap-2">

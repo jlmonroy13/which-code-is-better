@@ -28,19 +28,25 @@ export const isAfterToday = (dateStr: string) => {
   return inputDate.getTime() > todayUTC;
 };
 
-export function getDateFromWeek(week: number) {
-  const now = new Date();
-  const yearStart = new Date(now.getFullYear(), 0, 1);
-  return new Date(yearStart.getTime() + week * 7 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .split("T")[0];
-}
+export const getDateFromWeek = (year: number, week: number): Date => {
+  const simple = new Date(year, 0, 1 + (week - 1) * 7);
+  const dow = simple.getDay();
+  const ISOweekStart = simple;
+  if (dow <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+  else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+  return ISOweekStart;
+};
 
 export const getCurrentWeek = (): string => {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);
-  const weekNumber = Math.ceil((((now.getTime() - startOfYear.getTime()) / 86400000) + startOfYear.getDay() + 1) / 7);
-  return `${now.getFullYear()}-W${weekNumber.toString().padStart(2, '0')}`;
+  const weekNumber = Math.ceil(
+    ((now.getTime() - startOfYear.getTime()) / 86400000 +
+      startOfYear.getDay() +
+      1) /
+      7
+  );
+  return `${now.getFullYear()}-W${weekNumber.toString().padStart(2, "0")}`;
 };
 
 export const getStartOfWeek = (date: Date = new Date()): Date => {
@@ -51,10 +57,10 @@ export const getStartOfWeek = (date: Date = new Date()): Date => {
 };
 
 export const isWeekPassed = (weekStr: string): boolean => {
-  const [year, week] = weekStr.split('-W').map(Number);
+  const [year, week] = weekStr.split("-W").map(Number);
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentWeek = getCurrentWeek().split('-W')[1];
+  const currentWeek = getCurrentWeek().split("-W")[1];
 
   if (year < currentYear) return true;
   if (year > currentYear) return false;
@@ -69,6 +75,5 @@ export function getNextWeekStartUT(): Date {
   const nextWeekStart = new Date(now);
   nextWeekStart.setUTCDate(now.getUTCDate() + daysUntilNextWeek);
   nextWeekStart.setUTCHours(0, 0, 0, 0);
-  console.log('nextWeekStart', nextWeekStart)
   return nextWeekStart;
 }
