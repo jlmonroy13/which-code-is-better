@@ -17,7 +17,7 @@ const Rumble = () => {
   if (!rumble?._id)
     return (
       <div className="max-w-2xl text-2xl mx-auto p-6 text-center h-full flex items-center">
-        There is no rumble available for this date. Please try a different date.
+        There is no rumble available for this week. Please try a different week.
       </div>
     );
 

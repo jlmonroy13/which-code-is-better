@@ -38,7 +38,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           {weeks.map((week) => (
             <li key={week} className="mb-2 px-4">
               <Link
-                href={`/week/${week}`}
+                href={`/${week}`}
                 className={`block p-2 rounded ${
                   selectedWeek === week
                     ? "bg-primary text-white"

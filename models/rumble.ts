@@ -26,6 +26,7 @@ const rumbleSchema = new Schema({
   comments: [commentSchema],
   votes: [voteSchema],
   createdAt: { type: Date, default: Date.now },
+  title: { type: String, required: true, unique: true },
 });
 
 const Rumble = models?.Rumble || model("Rumble", rumbleSchema);

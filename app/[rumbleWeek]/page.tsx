@@ -1,15 +1,15 @@
 import Rumble from "@/components/Rumble";
 import { RumbleProvider } from "@/context/rumbleContext";
-import { getRumbleByDate } from "@/utils/api/rumble";
+import { getRumbleByWeek } from "@/utils/api/rumble";
 
 interface RumblePageProps {
-  params: { rumbleDate: string };
+  params: { rumbleWeek: string };
 }
 
 const RumblePage: React.FC<RumblePageProps> = async ({
-  params: { rumbleDate },
+  params: { rumbleWeek },
 }) => {
-  const rumble = await getRumbleByDate(rumbleDate);
+  const rumble = await getRumbleByWeek(rumbleWeek);
 
   return (
     <RumbleProvider rumble={rumble}>
