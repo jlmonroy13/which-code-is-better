@@ -60,3 +60,15 @@ export const isWeekPassed = (weekStr: string): boolean => {
   if (year > currentYear) return false;
   return week < Number(currentWeek);
 };
+
+export function getNextWeekStartUT(): Date {
+  const now = new Date();
+  const dayOfWeek = now.getUTCDay(); // 0 (Sunday) to 6 (Saturday)
+  const daysUntilNextWeek = 7 - dayOfWeek;
+
+  const nextWeekStart = new Date(now);
+  nextWeekStart.setUTCDate(now.getUTCDate() + daysUntilNextWeek);
+  nextWeekStart.setUTCHours(0, 0, 0, 0);
+  console.log('nextWeekStart', nextWeekStart)
+  return nextWeekStart;
+}

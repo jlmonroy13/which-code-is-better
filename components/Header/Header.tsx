@@ -1,7 +1,7 @@
 "use client";
 
 import { UserInterface } from "@/types/user";
-import { getNextMidnightUT } from "@/utils/date";
+import { getNextWeekStartUT } from "@/utils/date";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ const Header = ({ user, toggleSideMenu }: HeaderProps) => {
           <div className="flex items-center gap-2">
             Voting ends in:
             <div className="rounded bg-primary px-2 py-1 text-base-100 font-medium min-w-[115px] min-h-[32px]">
-              {isClient ? <Countdown date={getNextMidnightUT()} /> : "00:00:00:00"}
+              {isClient ? <Countdown date={getNextWeekStartUT()} /> : "00:00:00:00"}
             </div>
           </div>
         <div className="flex items-center gap-4">
