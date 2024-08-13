@@ -37,16 +37,19 @@ export const getDateFromWeek = (year: number, week: number): Date => {
   return ISOweekStart;
 };
 
-export const getCurrentWeek = (): string => {
-  const now = new Date();
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
+export const getCurrentWeek = () => {
+  const today = new Date();
+  const utcToday = new Date(
+    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+  );
+  const startOfYear = new Date(utcToday.getFullYear(), 0, 1);
   const weekNumber = Math.ceil(
-    ((now.getTime() - startOfYear.getTime()) / 86400000 +
+    ((utcToday.getTime() - startOfYear.getTime()) / 86400000 +
       startOfYear.getDay() +
       1) /
       7
   );
-  return `${now.getFullYear()}-W${weekNumber.toString().padStart(2, "0")}`;
+  return `${utcToday.getFullYear()}-W${weekNumber.toString().padStart(2, "0")}`;
 };
 
 export const getStartOfWeek = (date: Date = new Date()): Date => {

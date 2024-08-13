@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/authContext";
 import { useRumble } from "@/context/rumbleContext";
-import { getDateFromWeek } from "@/utils/date"; // Assuming this utility function exists
+import { getCurrentWeek } from "@/utils/date";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
@@ -18,20 +18,10 @@ const CodeSnippetContainer: React.FC<
   const { rumble, updateRumble } = useRumble();
   const { id } = props;
 
-  const isRumbleActive = useMemo(() => {
-    if (!rumble?.rumbleWeek) return false;
-
-    const [year, week] = rumble.rumbleWeek.split("-W").map(Number);
-
-    const inputDate = getDateFromWeek(year, week);
-
-    const today = new Date();
-    const utcToday = new Date(
-      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
-    );
-
-    return inputDate.getTime() === utcToday.getTime();
-  }, [rumble?.rumbleWeek]);
+  const isRumbleActive = useMemo(
+    () => getCurrentWeek() === rumble?.rumbleWeek,
+    [rumble?.rumbleWeek]
+  );
 
   const onVote = async () => {
     try {
