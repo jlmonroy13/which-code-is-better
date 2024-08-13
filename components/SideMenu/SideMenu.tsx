@@ -20,19 +20,22 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
   useEffect(() => {
     const fetchRumbles = async () => {
       const fetchedRumbles = await getAllRumbles();
-      setRumbles(fetchedRumbles);
+      const sortedRumbles = fetchedRumbles.sort((a, b) =>
+        b.rumbleWeek.localeCompare(a.rumbleWeek)
+      );
+      setRumbles(sortedRumbles);
 
       const weekFromUrl = pathname.split('/')[1];
       const currentWeek = getCurrentWeek();
 
-      if (weekFromUrl && fetchedRumbles.some(rumble => rumble.rumbleWeek === weekFromUrl)) {
+      if (weekFromUrl && sortedRumbles.some(rumble => rumble.rumbleWeek === weekFromUrl)) {
         setSelectedRumble(weekFromUrl);
       } else {
-        const currentWeekRumble = fetchedRumbles.find(rumble => rumble.rumbleWeek === currentWeek);
+        const currentWeekRumble = sortedRumbles.find(rumble => rumble.rumbleWeek === currentWeek);
         if (currentWeekRumble) {
           setSelectedRumble(currentWeekRumble.rumbleWeek);
-        } else if (fetchedRumbles.length > 0) {
-          setSelectedRumble(fetchedRumbles[0].rumbleWeek);
+        } else if (sortedRumbles.length > 0) {
+          setSelectedRumble(sortedRumbles[0].rumbleWeek);
         }
       }
     };
@@ -53,7 +56,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
       />
       <div
         className={cx(
-          "fixed top-0 left-0 h-full bg-base-200 w-64 transition-all duration-300 ease-in-out transform z-50",
+          "fixed top-0 left-0 h-full bg-base-200 w-80 transition-all duration-300 ease-in-out transform z-50",
           {
             "translate-x-0": isVisible,
             "-translate-x-full": !isVisible,
@@ -66,7 +69,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
             onClick={onClose}
             className="p-2 rounded-full hover:bg-base-300"
           >
-            <FaChevronLeft className="w-6 h-6" />
+            <FaChevronLeft size={18} />
           </button>
         </div>
         <ul className="overflow-y-auto max-h-[calc(100vh-64px)]">
@@ -80,7 +83,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
                 })}
                 onClick={() => setSelectedRumble(rumble.rumbleWeek)}
               >
-                {rumble.title}
+                {rumble.rumbleWeek.split('-')[1].slice(1)} - {rumble.title}
               </Link>
             </li>
           ))}
