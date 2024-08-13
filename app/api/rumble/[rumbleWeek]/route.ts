@@ -2,7 +2,6 @@ import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { populateUserOnRumbleComments } from "@/utils/api/rumble";
-import { isWeekPassed } from "@/utils/date";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
@@ -14,13 +13,9 @@ export async function PUT(
     const data = await request.json();
 
     await connectMongoDB();
-    const updatedRumble = await Rumble.findOneAndUpdate(
-      { rumbleWeek },
-      data,
-      {
-        new: true,
-      }
-    );
+    const updatedRumble = await Rumble.findOneAndUpdate({ rumbleWeek }, data, {
+      new: true,
+    });
     if (!updatedRumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
@@ -107,13 +102,9 @@ export async function PATCH(
     const data = await request.json();
 
     await connectMongoDB();
-    const updatedRumble = await Rumble.findOneAndUpdate(
-      { rumbleWeek },
-      data,
-      {
-        new: true,
-      }
-    )
+    const updatedRumble = await Rumble.findOneAndUpdate({ rumbleWeek }, data, {
+      new: true,
+    })
       .populate({
         path: "comments.userId",
         select: "name image",

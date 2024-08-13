@@ -1,12 +1,12 @@
-import { RumbleInterface } from "@/types/rumble";
-
 export interface CodeSnippetProps {
-  id: string;
   className?: string;
   code: string;
   containerClassName?: string;
+  hasVoted: boolean;
+  id: string;
+  isRumbleActive: boolean;
+  isVoting: boolean;
   language: string;
   onVote?: () => void;
-  hasVoted: boolean;
-  isVoting: boolean;
+  rumbleWinner?: string;
 }

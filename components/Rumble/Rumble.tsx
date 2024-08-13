@@ -5,7 +5,7 @@ import { useRumble } from "@/context/rumbleContext";
 import cx from "classnames";
 import { Orbitron } from "next/font/google";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import CodeSnippet from "../CodeSnippet";
 import CommentsSection from "../CommentsSection";
@@ -25,6 +25,25 @@ const Rumble = () => {
   const closeSideMenu = () => {
     setIsSideMenuVisible(false);
   };
+
+  const rumbleWinner = useMemo(() => {
+    if (!rumble) return;
+
+    const { votes, snippets } = rumble;
+    const voteCounts = votes.reduce(
+      (counts, { snippetId }) => {
+        if (snippetId === snippets[0]._id) counts[0]++;
+        if (snippetId === snippets[1]._id) counts[1]++;
+        return counts;
+      },
+      [0, 0]
+    );
+
+    const [snippet1Votes, snippet2Votes] = voteCounts;
+
+    if (snippet1Votes > snippet2Votes) return snippets[0]._id;
+    if (snippet2Votes > snippet1Votes) return snippets[1]._id;
+  }, [rumble]);
 
   if (!rumble?._id)
     return (
@@ -75,22 +94,24 @@ const Rumble = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 relative">
             {snippet1._id && (
               <CodeSnippet
-                id={snippet1._id}
                 className="ml-auto"
                 code={snippet1.code}
                 containerClassName="bg-gradient-to-t from-red-500 to-base-100"
-                language={snippet1.language}
                 hasVoted={hasVotedSnipped1}
+                id={snippet1._id}
+                language={snippet1.language}
+                rumbleWinner={rumbleWinner}
               />
             )}
             {snippet2._id && (
               <CodeSnippet
-                id={snippet2._id}
                 className="mr-auto"
                 code={snippet2.code}
                 containerClassName="bg-gradient-to-t from-blue-500 to-base-100"
-                language={snippet2.language}
                 hasVoted={hasVotedSnipped2}
+                id={snippet2._id}
+                language={snippet2.language}
+                rumbleWinner={rumbleWinner}
               />
             )}
             <Image

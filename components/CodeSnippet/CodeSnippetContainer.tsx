@@ -10,7 +10,7 @@ import CodeSnippet from "./CodeSnippet";
 import { CodeSnippetProps } from "./CodeSnippet.types";
 
 const CodeSnippetContainer: React.FC<
-  Omit<CodeSnippetProps, "onVote" | "isVoting">
+  Omit<CodeSnippetProps, "onVote" | "isVoting" | "isRumbleActive">
 > = (props) => {
   const router = useRouter();
   const { user } = useAuth();
@@ -28,7 +28,7 @@ const CodeSnippetContainer: React.FC<
       if (!user) {
         router.push("/auth/login");
       } else if (!isRumbleActive) {
-        location.reload();
+        return;
       } else if (rumble) {
         setIsVoting(true);
         let votes = rumble.votes;
@@ -62,7 +62,14 @@ const CodeSnippetContainer: React.FC<
     }
   };
 
-  return <CodeSnippet {...props} onVote={onVote} isVoting={isVoting} />;
+  return (
+    <CodeSnippet
+      {...props}
+      isRumbleActive={isRumbleActive}
+      isVoting={isVoting}
+      onVote={onVote}
+    />
+  );
 };
 
 export default CodeSnippetContainer;

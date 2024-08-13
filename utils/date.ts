@@ -11,7 +11,7 @@ export const getCurrentWeek = () => {
   return `${now.getUTCFullYear()}-W${weekNumber.toString().padStart(2, "0")}`;
 };
 
-export const isWeekPassed = (weekStr: string) => {
+export const getIsWeekPassed = (weekStr: string) => {
   const [year, week] = weekStr.split("-W").map(Number);
   const currentDate = new Date();
   const currentYear = currentDate.getUTCFullYear();
