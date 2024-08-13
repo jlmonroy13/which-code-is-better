@@ -33,7 +33,7 @@ const Rumble = () => {
       </div>
     );
 
-  const { snippets } = rumble;
+  const { snippets, title } = rumble;
   const [snippet1, snippet2] = snippets;
   const userVote = rumble.votes.find(
     ({ userId }) => userId === session?.user?.id
@@ -60,6 +60,11 @@ const Rumble = () => {
             >
               Which Code Is Better?
             </h1>
+            {title && (
+              <h2 className="text-2xl font-semibold text-center mb-4 text-neutral-200">
+                {title}
+              </h2>
+            )}
             <div className="text-center text-neutral-300  px-6">
               <span className="underline">
                 Click on the code snippet you think is best.

@@ -41,7 +41,7 @@ export async function GET() {
   try {
     await connectMongoDB();
     const rumbles = await Rumble.find();
-    return NextResponse.json({ rumbles }, { status: 200 });
+    return NextResponse.json(rumbles, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch rumbles", error },

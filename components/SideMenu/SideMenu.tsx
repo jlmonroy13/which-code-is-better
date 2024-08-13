@@ -1,8 +1,11 @@
 "use client";
 import cx from "classnames";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaChevronLeft } from "react-icons/fa";
+import { getAllRumbles } from "@/utils/api/rumble";
+import { RumbleInterface } from "@/types/rumble";
+import { getCurrentWeek } from "@/utils/date";
 
 interface SideMenuProps {
   isVisible: boolean;
@@ -10,8 +13,31 @@ interface SideMenuProps {
 }
 
 function SideMenu({ isVisible, onClose }: SideMenuProps) {
-  const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
-  const weeks = generateWeeks();
+  const [rumbles, setRumbles] = useState<RumbleInterface[]>([]);
+  const [selectedRumble, setSelectedRumble] = useState<string | null>(null);
+  const { pathname } = window.location;
+
+  useEffect(() => {
+    const fetchRumbles = async () => {
+      const fetchedRumbles = await getAllRumbles();
+      setRumbles(fetchedRumbles);
+
+      const weekFromUrl = pathname.split('/')[1];
+      const currentWeek = getCurrentWeek();
+
+      if (weekFromUrl && fetchedRumbles.some(rumble => rumble.rumbleWeek === weekFromUrl)) {
+        setSelectedRumble(weekFromUrl);
+      } else {
+        const currentWeekRumble = fetchedRumbles.find(rumble => rumble.rumbleWeek === currentWeek);
+        if (currentWeekRumble) {
+          setSelectedRumble(currentWeekRumble.rumbleWeek);
+        } else if (fetchedRumbles.length > 0) {
+          setSelectedRumble(fetchedRumbles[0].rumbleWeek);
+        }
+      }
+    };
+    fetchRumbles();
+  }, [pathname]);
 
   return (
     <>
@@ -44,17 +70,17 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           </button>
         </div>
         <ul className="overflow-y-auto max-h-[calc(100vh-64px)]">
-          {weeks.map((week) => (
-            <li key={week} className="mb-2 px-4">
+          {rumbles.map((rumble) => (
+            <li key={rumble.rumbleWeek} className="mb-2 px-4">
               <Link
-                href={`/${week}`}
+                href={`/${rumble.rumbleWeek}`}
                 className={cx("block p-2 rounded", {
-                  "bg-primary text-neutral": selectedWeek === week,
-                  "hover:bg-base-300": selectedWeek !== week,
+                  "bg-primary text-neutral": selectedRumble === rumble.rumbleWeek,
+                  "hover:bg-base-300": selectedRumble !== rumble.rumbleWeek,
                 })}
-                onClick={() => setSelectedWeek(week)}
+                onClick={() => setSelectedRumble(rumble.rumbleWeek)}
               >
-                Week {week}
+                {rumble.title}
               </Link>
             </li>
           ))}
@@ -65,16 +91,3 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
 }
 
 export default SideMenu;
-
-function getCurrentWeek() {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 1);
-  const diff = now.getTime() - start.getTime();
-  const oneWeek = 1000 * 60 * 60 * 24 * 7;
-  return Math.ceil(diff / oneWeek);
-}
-
-function generateWeeks() {
-  const currentWeek = getCurrentWeek();
-  return Array.from({ length: currentWeek }, (_, i) => currentWeek - i);
-}

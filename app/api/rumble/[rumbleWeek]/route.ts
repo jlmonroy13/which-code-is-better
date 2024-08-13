@@ -55,7 +55,7 @@ export async function GET(
       })
       .exec();
 
-    if (!rumble || isWeekPassed(rumbleWeek)) {
+    if (!rumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }

@@ -41,3 +41,12 @@ export const populateUserOnRumbleComments = (rumble: RumbleInterface) => {
     };
   });
 };
+
+export const getAllRumbles = async (): Promise<RumbleInterface[]> => {
+  if (process.env.NODE_ENV === "development") {
+    const res = await fetch(`${BASE_API_URL}/api/rumble`);
+    return res.json();
+  }
+  await connectMongoDB();
+  return Rumble.find();
+};

@@ -28,4 +28,5 @@ export interface RumbleInterface {
   comments: CommentInterface[];
   votes: VoteInterface[];
   createdAt?: Date;
+  title: string;
 }
