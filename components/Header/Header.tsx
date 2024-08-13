@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import logo from "../../public/logo.svg";
-import UserProfile from "../UserProfille/UserProfile";
+import UserProfile from "../UserProfile";
 
 interface HeaderProps {
   user?: UserInterface | null;
@@ -38,7 +38,19 @@ const Header = ({ user }: HeaderProps) => {
           <div className="flex items-center gap-2">
             Voting ends in:
             <div className="rounded bg-primary px-2 py-1 text-base-100 font-medium min-w-[115px] min-h-[32px]">
-              {isClient ? <Countdown date={getNextWeekStartUTC()} /> : "00:00:00:00"}
+              {isClient ? (
+                <Countdown
+                  date={getNextWeekStartUTC()}
+                  renderer={({ days, hours }) => (
+                    <span>
+                      {days} day{days !== 1 ? 's' : ''}{' '}
+                      {hours} hour{hours !== 1 ? 's' : ''}
+                    </span>
+                  )}
+                />
+              ) : (
+                "0 days 0 hours"
+              )}
             </div>
           </div>
         <div className="flex items-center gap-4">
