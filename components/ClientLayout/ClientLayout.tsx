@@ -13,7 +13,7 @@ function ClientLayout({ user, children }: ClientLayoutProps) {
     <div className="relative min-h-svh flex flex-col">
       <Header user={user} />
       <div className="flex flex-1">
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 flex">{children}</main>
       </div>
     </div>
   );

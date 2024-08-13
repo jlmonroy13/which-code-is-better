@@ -62,14 +62,14 @@ const Rumble = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-base-100 relative">
+      <div className="min-h-screen bg-base-100 relative w-full">
         <button
           onClick={toggleSideMenu}
           className="flex items-center gap-2 bg-neutral text-neutral-content px-3 py-2 rounded absolute top-4 left-5 z-10 hover:text-white transition-colors shadow-md capitalize"
         >
           <FaBars /> Previous rumbles
         </button>
-        <main className="mx-auto pt-20">
+        <div className="mx-auto pt-20">
           <div className="max-w-2xl px-5 mx-auto">
             <h1
               className={cx(
@@ -125,7 +125,7 @@ const Rumble = () => {
           <div className="max-w-[1280px] mx-auto p-6">
             <CommentsSection hasVoted={!!userVote} />
           </div>
-        </main>
+        </div>
         <SideMenu isVisible={isSideMenuVisible} onClose={closeSideMenu} />
       </div>
     </>
