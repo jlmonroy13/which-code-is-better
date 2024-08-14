@@ -101,7 +101,11 @@ export async function PATCH(
     const { rumbleWeek } = params;
     const data = await request.json();
 
+    console.log(`[PATCH] Updating rumble for week: ${rumbleWeek}`);
+    console.log(`[PATCH] Update data: ${JSON.stringify(data)}`);
+
     await connectMongoDB();
+
     const updatedRumble = await Rumble.findOneAndUpdate({ rumbleWeek }, data, {
       new: true,
     })
@@ -109,24 +113,32 @@ export async function PATCH(
         path: "comments.userId",
         select: "name image",
       })
+      .lean()
       .exec();
 
     if (!updatedRumble) {
+      console.log(`[PATCH] Rumble not found for week: ${rumbleWeek}`);
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }
       );
     }
-    console.log("////////// updatedRumble //////////", updatedRumble);
+
     // Merge populated data with original user ID
-    const modifiedRumble: RumbleInterface = updatedRumble.toObject();
+    const modifiedRumble = updatedRumble as RumbleInterface;
     modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
-    console.log("///////// modifiedRumble.comments ///////////", modifiedRumble.comments);
+
+    console.log(`[PATCH] Updated rumble: ${JSON.stringify(modifiedRumble, null, 2)}`);
+
     return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
-    console.error("error", error);
+    console.error(`[PATCH] Error updating rumble:`, error);
     return NextResponse.json(
-      { message: "Error updating rumble", error },
+      {
+        message: "Error updating rumble",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      },
       { status: 500 }
     );
   }
