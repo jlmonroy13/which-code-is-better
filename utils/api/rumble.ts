@@ -48,19 +48,18 @@ export const populateUserOnRumbleComments = (rumble: RumbleInterface) => {
 };
 
 export const getRumbles = async (filter?: string): Promise<RumbleInterface[]> => {
-  if (process.env.NODE_ENV === "development") {
+  try {
     const url = new URL(`${BASE_API_URL}/api/rumble`);
     if (filter === "presentAndPast") {
       url.searchParams.append("filter", "presentAndPast");
     }
     const res = await fetch(url.toString());
-    return res.json();
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching rumbles:", error);
+    throw error;
   }
-  await connectMongoDB();
-  let query = {};
-  if (filter === "presentAndPast") {
-    const currentYearWeek = getCurrentWeek();
-    query = { rumbleWeek: { $lte: currentYearWeek } };
-  }
-  return Rumble.find(query).sort({ rumbleWeek: -1 });
 };
