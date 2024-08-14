@@ -21,7 +21,6 @@ You can start editing the page by modifying [`app/page.tsx`](./app/page.tsx). Th
 The project has the following structure:
 
 ```
-.next/
 actions/
 app/
 components/
