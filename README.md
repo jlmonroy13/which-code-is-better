@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Which Code is Better
+
+"Which Code is Better" is a web application designed to facilitate code comparison and evaluation. Built with [Next.js](https://nextjs.org/), this project allows users to review and rate code snippets. The application leverages modern web technologies and practices to provide a seamless and interactive user experience.
 
 ## Getting Started
 
@@ -14,11 +16,48 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:4000](http://localhost:4000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying [`app/page.tsx`](./app/page.tsx). The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project Structure
+
+The project has the following structure:
+
+```
+.next/
+actions/
+app/
+components/
+context/
+libs/
+models/
+public/
+schemas/
+utils/
+```
+
+### Key Components
+
+- **CodeSnippet**: Implemented in [`components/CodeSnippet/CodeSnippet.tsx`](./components/CodeSnippet/CodeSnippet.tsx)
+- **CommentsSection**: Implemented in [`components/CommentsSection/CommentsSection.tsx`](./components/CommentsSection/CommentsSection.tsx)
+- **Rumble**: Implemented in [`components/Rumble/Rumble.tsx`](./components/Rumble/Rumble.tsx)
+- **SideMenu**: Implemented in [`components/SideMenu/SideMenu.tsx`](./components/SideMenu/SideMenu.tsx)
+
+### Utilities
+
+- **Date Utilities**: Functions like `getNextWeekStartUTC`, `nextWeekStart`, and `startOfYearUTC` are implemented in [`utils/date.ts`](./utils/date.ts).
+
+## API Routes
+
+- **Rumble API**: Handled in [`app/api/rumble/[rumbleWeek]/route.ts`](./app/api/rumble/[rumbleWeek]/route.ts)
+- **User API**: Handled in [`app/api/users/[id]/route.ts`](./app/api/users/[id]/route.ts)
+
+## Deployment
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## Learn More
 
@@ -29,8 +68,11 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Contributors
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Jorge M.](https://www.linkedin.com/in/jorge-luis-monroy-herrera/)
+- [Selvio P.](https://www.linkedin.com/in/selvio-perez-vergara-77618073/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## License
+
+This project is licensed under the MIT License.

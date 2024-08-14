@@ -2,6 +2,7 @@
 
 import Header from "@/components/Header";
 import { UserInterface } from "@/types/user";
+import Footer from "../Footer";
 
 interface ClientLayoutProps {
   user: UserInterface | null;
@@ -15,6 +16,7 @@ function ClientLayout({ user, children }: ClientLayoutProps) {
       <div className="flex flex-1">
         <main className="flex-1 flex">{children}</main>
       </div>
+      <Footer />
     </div>
   );
 }
