@@ -1,5 +1,6 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
+import User from "@/models/user"; // Added this import
 import { RumbleInterface } from "@/types/rumble";
 import { populateUserOnRumbleComments } from "@/utils/api/rumble";
 import { NextRequest, NextResponse } from "next/server";
@@ -105,6 +106,12 @@ export async function PATCH(
     console.log(`[PATCH] Update data: ${JSON.stringify(data)}`);
 
     await connectMongoDB();
+
+    // Ensure User model is registered
+    if (!User.modelName) {
+      console.log("[PATCH] Registering User model");
+      User.init();
+    }
 
     const updatedRumble = await Rumble.findOneAndUpdate({ rumbleWeek }, data, {
       new: true,
