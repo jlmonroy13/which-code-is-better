@@ -117,13 +117,14 @@ export async function PATCH(
         { status: 404 }
       );
     }
-
+    console.log("////////// updatedRumble //////////", updatedRumble);
     // Merge populated data with original user ID
     const modifiedRumble: RumbleInterface = updatedRumble.toObject();
     modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
-
+    console.log("///////// modifiedRumble.comments ///////////", modifiedRumble.comments);
     return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
+    console.error("error", error);
     return NextResponse.json(
       { message: "Error updating rumble", error },
       { status: 500 }
