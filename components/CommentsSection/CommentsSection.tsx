@@ -53,21 +53,27 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
             Please vote first to view or add comments.
           </div>
         ) : (
-          comments.map((comment) => (
-            <Comment
-              key={comment._id}
-              username={comment.userName || "Anonymous"}
-              text={comment.text}
-              avatarUrl={comment.userImage || ""}
-              onLike={() => !isLiking && handleLike(comment._id || "")}
-              onDelete={() => !isDeleting && handleDeleteComment(comment._id || "")}
-              timestamp={comment.createdAt || new Date()}
-              isOwner={comment.userId === user._id}
-              isDeleting={isDeleting}
-              hasLiked={comment.likes?.includes(user._id)}
-              likes={comment.likes?.length || 0}
-            />
-          ))
+          comments.length > 0 ? (
+            comments.map((comment) => (
+              <Comment
+                key={comment._id}
+                username={comment.userName || "Anonymous"}
+                text={comment.text}
+                avatarUrl={comment.userImage || ""}
+                onLike={() => !isLiking && handleLike(comment._id || "")}
+                onDelete={() => !isDeleting && handleDeleteComment(comment._id || "")}
+                timestamp={comment.createdAt || new Date()}
+                isOwner={comment.userId === user._id}
+                isDeleting={isDeleting}
+                hasLiked={comment.likes?.includes(user._id)}
+                likes={comment.likes?.length || 0}
+              />
+            ))
+          ) : (
+            <div className="text-center text-gray-400 font-bold p-10">
+              No comments yet.
+            </div>
+          )
         )}
       </div>
     </div>
