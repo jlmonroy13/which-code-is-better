@@ -3,7 +3,7 @@ import cx from "classnames";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { getAllRumbles } from "@/utils/api/rumble";
+import { getRumbles } from "@/utils/api/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { getCurrentWeek } from "@/utils/date";
 
@@ -19,7 +19,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
 
   useEffect(() => {
     const fetchRumbles = async () => {
-      const fetchedRumbles = await getAllRumbles();
+      const fetchedRumbles = await getRumbles("presentAndPast");
       const sortedRumbles = fetchedRumbles.sort((a, b) =>
         b.rumbleWeek.localeCompare(a.rumbleWeek)
       );

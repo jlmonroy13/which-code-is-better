@@ -30,7 +30,7 @@ const Rumble = () => {
     if (!rumble) return;
 
     const { votes, snippets } = rumble;
-    const voteCounts = votes.reduce(
+    const voteCounts = votes?.reduce(
       (counts, { snippetId }) => {
         if (snippetId === snippets[0]._id) counts[0]++;
         if (snippetId === snippets[1]._id) counts[1]++;
@@ -45,12 +45,25 @@ const Rumble = () => {
     if (snippet2Votes > snippet1Votes) return snippets[1]._id;
   }, [rumble]);
 
-  if (!rumble?._id)
+  if (!rumble?._id) {
     return (
-      <div className="max-w-2xl text-2xl mx-auto p-6 text-center h-full flex items-center">
-        There is no rumble available for this week. Please try a different week.
-      </div>
+      <>
+        <div className="max-w-2xl text-2xl mx-auto p-6 text-center h-full flex flex-col items-center justify-center">
+          <div className="mb-6">
+            There is no rumble available for this week. Please try a different
+            week.
+          </div>
+          <button
+            onClick={toggleSideMenu}
+            className="flex items-center gap-2 bg-neutral text-neutral-content px-3 py-1.5 rounded hover:text-white transition-colors shadow-md capitalize text-sm"
+          >
+            <FaBars /> Show Previous Rumbles
+          </button>
+        </div>
+        <SideMenu isVisible={isSideMenuVisible} onClose={closeSideMenu} />
+      </>
     );
+  }
 
   const { snippets, title } = rumble;
   const [snippet1, snippet2] = snippets;

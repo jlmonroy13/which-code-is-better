@@ -1,6 +1,7 @@
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentWeek } from '@/utils/date';
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,10 +38,18 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectMongoDB();
-    const rumbles = await Rumble.find();
+    const filterType = request.nextUrl.searchParams.get("filter");
+
+    let query = {};
+    if (filterType === "presentAndPast") {
+      const currentYearWeek = getCurrentWeek();
+      query = { rumbleWeek: { $lte: currentYearWeek } };
+    }
+
+    const rumbles = await Rumble.find(query).sort({ rumbleWeek: -1 });
     return NextResponse.json(rumbles, { status: 200 });
   } catch (error) {
     return NextResponse.json(

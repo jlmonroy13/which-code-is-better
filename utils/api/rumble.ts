@@ -2,6 +2,7 @@ import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { UserInterface } from "@/types/user";
+import { getCurrentWeek } from '@/utils/date';
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
@@ -10,10 +11,14 @@ export const RUMBLE_URL = (rumbleWeek: string) => `/api/rumble/${rumbleWeek}`;
 export const getRumbleByWeek = async (rumbleWeek: string): Promise<RumbleInterface | null> => {
   if (process.env.NODE_ENV === "development") {
     const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleWeek}`);
+    if (res.status === 404) {
+      return null;
+    }
     return res.json();
   }
   await connectMongoDB();
-  return Rumble.findOne({ rumbleWeek });
+  const rumble = await Rumble.findOne({ rumbleWeek });
+  return rumble || null;
 };
 
 export const updateRumbleFetcher = async (
@@ -42,11 +47,20 @@ export const populateUserOnRumbleComments = (rumble: RumbleInterface) => {
   });
 };
 
-export const getAllRumbles = async (): Promise<RumbleInterface[]> => {
+export const getRumbles = async (filter?: string): Promise<RumbleInterface[]> => {
   if (process.env.NODE_ENV === "development") {
-    const res = await fetch(`${BASE_API_URL}/api/rumble`);
+    const url = new URL(`${BASE_API_URL}/api/rumble`);
+    if (filter === "presentAndPast") {
+      url.searchParams.append("filter", "presentAndPast");
+    }
+    const res = await fetch(url.toString());
     return res.json();
   }
   await connectMongoDB();
-  return Rumble.find();
+  let query = {};
+  if (filter === "presentAndPast") {
+    const currentYearWeek = getCurrentWeek();
+    query = { rumbleWeek: { $lte: currentYearWeek } };
+  }
+  return Rumble.find(query).sort({ rumbleWeek: -1 });
 };
