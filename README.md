@@ -7,13 +7,9 @@
 First, run the development server:
 
 ```bash
-npm run dev
-# or
+yarn
+
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:4000](http://localhost:4000) with your browser to see the result.
@@ -70,8 +66,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Contributors
 
-- [Jorge M.](https://www.linkedin.com/in/jorge-luis-monroy-herrera/)
-- [Selvio P.](https://www.linkedin.com/in/selvio-perez-vergara-77618073/)
+- [Jorge Monroy](https://www.linkedin.com/in/jorge-luis-monroy-herrera/)
+- [Selvio Pérez](https://www.linkedin.com/in/selvio-perez-vergara-77618073/)
 
 ## License
 
