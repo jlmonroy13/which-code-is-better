@@ -3,7 +3,7 @@ import { FaDiscord, FaGithub } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="footer bg-neutral text-neutral-content px-10 py-6 flex justify-between">
+    <div className="footer bg-neutral text-neutral-content px-10 py-6 flex justify-between items-center">
       <div className="flex flex-col items-center gap-2 sm:flex-row">
         Copyright © 2024 - All rights reserved.
         <span>
