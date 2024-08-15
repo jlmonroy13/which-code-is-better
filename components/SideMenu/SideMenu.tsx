@@ -4,6 +4,7 @@ import { getRumbles } from "@/utils/api/rumble";
 import { getCurrentWeek } from "@/utils/date";
 import cx from "classnames";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
@@ -15,7 +16,7 @@ interface SideMenuProps {
 function SideMenu({ isVisible, onClose }: SideMenuProps) {
   const [rumbles, setRumbles] = useState<RumbleInterface[]>([]);
   const [selectedRumble, setSelectedRumble] = useState<string | null>(null);
-  const { pathname } = window.location;
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchRumbles = async () => {
@@ -25,13 +26,18 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
       );
       setRumbles(sortedRumbles);
 
-      const weekFromUrl = pathname.split('/')[1];
+      const weekFromUrl = pathname.split("/")[1];
       const currentWeek = getCurrentWeek();
 
-      if (weekFromUrl && sortedRumbles.some(rumble => rumble.rumbleWeek === weekFromUrl)) {
+      if (
+        weekFromUrl &&
+        sortedRumbles.some((rumble) => rumble.rumbleWeek === weekFromUrl)
+      ) {
         setSelectedRumble(weekFromUrl);
       } else {
-        const currentWeekRumble = sortedRumbles.find(rumble => rumble.rumbleWeek === currentWeek);
+        const currentWeekRumble = sortedRumbles.find(
+          (rumble) => rumble.rumbleWeek === currentWeek
+        );
         if (currentWeekRumble) {
           setSelectedRumble(currentWeekRumble.rumbleWeek);
         } else if (sortedRumbles.length > 0) {
@@ -78,12 +84,13 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
               <Link
                 href={`/${rumble.rumbleWeek}`}
                 className={cx("block p-2 rounded", {
-                  "bg-primary text-neutral": selectedRumble === rumble.rumbleWeek,
+                  "bg-primary text-neutral":
+                    selectedRumble === rumble.rumbleWeek,
                   "hover:bg-base-300": selectedRumble !== rumble.rumbleWeek,
                 })}
                 onClick={() => setSelectedRumble(rumble.rumbleWeek)}
               >
-                {rumble.rumbleWeek.split('-')[1].slice(1)} - {rumble.title}
+                {rumble.rumbleWeek.split("-")[1].slice(1)} - {rumble.title}
               </Link>
             </li>
           ))}
