@@ -47,7 +47,7 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
   };
 
   useEffect(() => {
-    if (!rumble?.comments?.length) return;
+    if (!rumble?.comments) return;
     setComments(rumble?.comments || []);
   }, [rumble?.comments]);
 
