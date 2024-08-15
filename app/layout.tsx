@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Which Code Is Better?",
-  description: "Daily code snippet comparisons",
+  description: "Weekly code snippet comparisons",
 };
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;

@@ -18,7 +18,7 @@ const sendEmail = async (
   results: VoteResult[]
 ): Promise<void> => {
   const emailBody = `
-    <h1>Daily Vote Results</h1>
+    <h1>Weekly Vote Results</h1>
     <p>Here are the results for today:</p>
     <ul>
       ${results
@@ -40,7 +40,7 @@ const sendEmail = async (
       body: JSON.stringify({
         from: `Which code is Better <${process.env.AUTH_RESEND_FROM_EMAIL}>`,
         to: recipient,
-        subject: "Daily Vote Results",
+        subject: "Weekly Vote Results",
         html: emailBody,
       }),
     });
