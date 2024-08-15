@@ -60,19 +60,26 @@ const sendEmail = async (
   }
 };
 
-export async function GET() {
-  const results = await fetchVoteResults();
-  const recipients = ["jlmonroy13@gmail.com"];
-  console.log('THIS IS A TEST');
-  try {
-    await Promise.all(
-      recipients.map((recipient) => sendEmail(recipient, results))
-    );
-    return NextResponse.json({ message: "Emails sent successfully" });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Failed to send some emails",
-      error: error,
-    });
+export async function GET(request: Request) {
+  const isCron = request.headers.get('x-vercel-cron') === 'true';
+
+  if (isCron) {
+    console.log('Cron job executed at 1pm UTC');
+    const results = await fetchVoteResults();
+    const recipients = ["jlmonroy13@gmail.com"];
+    try {
+      await Promise.all(
+        recipients.map((recipient) => sendEmail(recipient, results))
+      );
+      return NextResponse.json({ message: "Cron job: Emails sent successfully" });
+    } catch (error) {
+      return NextResponse.json({
+        message: "Cron job: Failed to send some emails",
+        error: error,
+      }, { status: 500 });
+    }
+  } else {
+    // Handle regular GET requests if needed
+    return NextResponse.json({ message: "This endpoint is for cron jobs" });
   }
 }
