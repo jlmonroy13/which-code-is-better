@@ -42,7 +42,7 @@ const Comment: React.FC<CommentProps> = ({
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <p className="font-semibold">{username}</p>
-          <div className="text-xs text-gray-400">
+          <div className="text-xs text-gray-400 sm:block hidden">
             {formatDistanceToNow(new Date(timestamp))}
           </div>
         </div>

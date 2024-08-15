@@ -102,14 +102,10 @@ export async function PATCH(
     const { rumbleWeek } = params;
     const data = await request.json();
 
-    console.log(`[PATCH] Updating rumble for week: ${rumbleWeek}`);
-    console.log(`[PATCH] Update data: ${JSON.stringify(data)}`);
-
     await connectMongoDB();
 
     // Ensure User model is registered
     if (!User.modelName) {
-      console.log("[PATCH] Registering User model");
       User.init();
     }
 
@@ -124,7 +120,6 @@ export async function PATCH(
       .exec();
 
     if (!updatedRumble) {
-      console.log(`[PATCH] Rumble not found for week: ${rumbleWeek}`);
       return NextResponse.json(
         { message: "Rumble not found" },
         { status: 404 }
@@ -135,8 +130,6 @@ export async function PATCH(
     const modifiedRumble = updatedRumble as RumbleInterface;
     modifiedRumble.comments = populateUserOnRumbleComments(modifiedRumble);
 
-    console.log(`[PATCH] Updated rumble: ${JSON.stringify(modifiedRumble, null, 2)}`);
-
     return NextResponse.json(modifiedRumble, { status: 200 });
   } catch (error) {
     console.error(`[PATCH] Error updating rumble:`, error);
@@ -144,7 +137,7 @@ export async function PATCH(
       {
         message: "Error updating rumble",
         error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
+        stack: error instanceof Error ? error.stack : undefined,
       },
       { status: 500 }
     );

@@ -75,7 +75,7 @@ const Rumble = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-base-100 relative w-full">
+      <div className="bg-base-100 relative w-full">
         <button
           onClick={toggleSideMenu}
           className="flex items-center gap-2 bg-neutral text-neutral-content px-3 py-2 rounded absolute top-4 left-5 z-10 hover:text-white transition-colors shadow-md capitalize"
@@ -106,15 +106,27 @@ const Rumble = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 relative">
             {snippet1._id && (
-              <CodeSnippet
-                className="ml-auto"
-                code={snippet1.code}
-                containerClassName="bg-gradient-to-t from-red-500 to-base-100"
-                hasVoted={hasVotedSnipped1}
-                id={snippet1._id}
-                language={snippet1.language}
-                rumbleWinner={rumbleWinner}
-              />
+              <div className="relative">
+                <CodeSnippet
+                  className="ml-auto"
+                  code={snippet1.code}
+                  containerClassName="bg-gradient-to-t from-red-500 to-base-100"
+                  hasVoted={hasVotedSnipped1}
+                  id={snippet1._id}
+                  language={snippet1.language}
+                  rumbleWinner={rumbleWinner}
+                />
+                <Image
+                  src="/vs.png"
+                  width={70}
+                  height={70}
+                  alt="vs"
+                  className={cx(
+                    "absolute bottom-0 z-20 translate-y-1/2 right-1/2 translate-x-1/2",
+                    "sm:-right-10 sm:translate-x-0 sm:bottom-1/2"
+                  )}
+                />
+              </div>
             )}
             {snippet2._id && (
               <CodeSnippet
@@ -127,13 +139,6 @@ const Rumble = () => {
                 rumbleWinner={rumbleWinner}
               />
             )}
-            <Image
-              src="/vs.png"
-              width={70}
-              height={70}
-              alt="vs"
-              className="absolute right-1/2 translate-x-1/2 bottom-1/2 z-20"
-            />
           </div>
           <div className="max-w-[1280px] mx-auto p-6">
             <CommentsSection hasVoted={!!userVote} />

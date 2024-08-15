@@ -26,7 +26,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = ({
   }, [rumble?.rumbleWeek]);
 
   return (
-    <div className={cx("h-full px-5 py-10", containerClassName)}>
+    <div className={cx("h-full px-5 py-5 sm:py-10", containerClassName)}>
       <div
         className={cx(
           "card rounded-lg relative grid h-full max-w-[595px]",

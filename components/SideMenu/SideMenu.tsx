@@ -1,11 +1,11 @@
 "use client";
+import { RumbleInterface } from "@/types/rumble";
+import { getRumbles } from "@/utils/api/rumble";
+import { getCurrentWeek } from "@/utils/date";
 import cx from "classnames";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { getRumbles } from "@/utils/api/rumble";
-import { RumbleInterface } from "@/types/rumble";
-import { getCurrentWeek } from "@/utils/date";
 
 interface SideMenuProps {
   isVisible: boolean;
@@ -63,13 +63,13 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           }
         )}
       >
-        <div className="flex justify-between items-center p-4">
-          <h1 className="text-xl font-bold">Explore Rumbles</h1>
+        <div className="flex justify-between items-center py-4 pl-4 pr-2">
+          <h1 className="text-lg font-bold">Explore Rumbles</h1>
           <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-base-300"
           >
-            <FaChevronLeft size={18} />
+            <FaChevronLeft size={16} />
           </button>
         </div>
         <ul className="overflow-y-auto max-h-[calc(100vh-64px)]">

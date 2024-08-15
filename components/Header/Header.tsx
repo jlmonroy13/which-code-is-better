@@ -49,7 +49,7 @@ const Header = ({ user }: HeaderProps) => {
   );
 
   return (
-    <header className="z-10 flex flex-col items-start justify-between gap-4 bg-black/20 px-7 py-4 sm:flex-row sm:items-center">
+    <header className="z-20 flex items-center justify-between gap-4 bg-black/20 px-7 py-4">
       <nav className="flex items-center gap-14">
         <Link href="/" className="flex flex-row items-center gap-2">
           <Image
@@ -63,7 +63,7 @@ const Header = ({ user }: HeaderProps) => {
       </nav>
       <div className="flex gap-14 items-center">
         <div className="flex items-center gap-2">
-          Voting ends in:
+        <span className="sm:block hidden">Voting ends in:</span>
           <div className="rounded bg-primary px-2 py-1 text-base-100 font-medium min-w-[115px] min-h-[32px]">
             {isClient ? (
               <Countdown
@@ -76,7 +76,7 @@ const Header = ({ user }: HeaderProps) => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          {user?.name || user?.email}
+          <span className="sm:block hidden">{user?.name || user?.email}</span>
           <UserProfile user={user} />
         </div>
       </div>
