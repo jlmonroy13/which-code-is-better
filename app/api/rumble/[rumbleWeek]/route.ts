@@ -47,7 +47,7 @@ export async function GET(
     const rumble = await Rumble.findOne({ rumbleWeek })
       .populate({
         path: "comments.userId",
-        select: "name image",
+        select: "name image email",
       })
       .exec();
 
