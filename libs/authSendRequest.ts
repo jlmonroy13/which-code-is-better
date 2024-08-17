@@ -32,7 +32,7 @@ export async function sendVerificationRequest(params: {
 function html(params: { url: string; host: string }) {
   const { url, host } = params;
 
-  const brandColor = "#FF533D";
+  const brandColor = "#9fe88d";
   const color = {
     background: "#16171b",
     text: "#fff",
@@ -40,13 +40,13 @@ function html(params: { url: string; host: string }) {
     mainBackground: "rgb(40, 44, 52)",
     buttonBackground: brandColor,
     buttonBorder: brandColor,
-    buttonText: "#fff",
+    buttonText: "#000",
   };
 
   return `
 <body style="background: ${color.background}; padding: 40px 0; border-radius: 10px;">
   <table width="100%" border="0" cellspacing="5" cellpadding="0"
-    style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px; padding:0 30px">
+    style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px; padding:0 30px; border: 2px solid ${brandColor};">
     <tr>
       <td align="center"
         style="padding: 20px 0px 10px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
@@ -80,7 +80,7 @@ function html(params: { url: string; host: string }) {
     <tr>
       <td align="left"
         style="padding: 0px 0px 40px 0px; font-size: 17px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.secondaryColor};">
-        If you didn’t request this email, no worries—you can safely ignore it.
+        If you didn't request this email, no worries—you can safely ignore it.
       </td>
     </tr>
     <tr>
