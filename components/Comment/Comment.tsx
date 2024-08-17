@@ -2,6 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import React from "react";
 import { AiOutlineDelete, AiOutlineLike } from "react-icons/ai";
+import { FaUser } from "react-icons/fa";
 
 interface CommentProps {
   isOwner: boolean;
@@ -30,13 +31,19 @@ const Comment: React.FC<CommentProps> = ({
 }) => (
   <div className="flex space-x-3 group relative">
     <div>
-      <Image
-        alt="avatar"
-        className="rounded-full"
-        height={40}
-        src={avatarUrl}
-        width={40}
-      />
+      {avatarUrl ? (
+        <Image
+          alt="avatar"
+          className="rounded-full"
+          height={40}
+          src={avatarUrl}
+          width={40}
+        />
+      ) : (
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-300 text-gray-600">
+          <FaUser className="w-6 h-6" />
+        </div>
+      )}
     </div>
     <div className="flex-1">
       <div className="flex flex-col gap-1">

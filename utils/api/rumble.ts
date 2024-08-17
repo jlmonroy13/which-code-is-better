@@ -43,6 +43,7 @@ export const populateUserOnRumbleComments = (rumble: RumbleInterface) => {
       userId: userInfo._id,
       userName: userInfo.name,
       userImage: userInfo.image,
+      userEmail: userInfo.email,
     };
   });
 };

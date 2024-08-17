@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
+import { FaUser } from "react-icons/fa";
 
 interface UserProfileProps {
   user?: UserInterface | null;
@@ -37,18 +38,24 @@ const UserProfile = ({ user }: UserProfileProps) => {
   }
 
   return (
-    <Menu as="div" className="relative z-50 ml-3">
+    <Menu as="div" className="relative z-50">
       <div>
         <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
           <span className="absolute -inset-1.5" />
           <span className="sr-only">Open user menu</span>
-          <Image
-            className="rounded-full"
-            src={user?.image || ""}
-            alt="Image of user profile"
-            width={32}
-            height={32}
-          />
+          {user?.image ? (
+            <Image
+              className="rounded-full"
+              src={user.image}
+              alt="Image of user profile"
+              width={32}
+              height={32}
+            />
+          ) : (
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-300 text-gray-600">
+              <FaUser className="w-5 h-5" />
+            </div>
+          )}
         </MenuButton>
       </div>
       <Transition

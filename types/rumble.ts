@@ -9,6 +9,7 @@ export interface CommentInterface {
   userId: string;
   userImage?: string;
   userName?: string;
+  userEmail?: string;
   text: string;
   likes: string[];
   createdAt?: Date;

@@ -114,7 +114,7 @@ export async function PATCH(
     })
       .populate({
         path: "comments.userId",
-        select: "name image",
+        select: "name image email",
       })
       .lean()
       .exec();

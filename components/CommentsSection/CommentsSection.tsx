@@ -57,7 +57,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
             comments.map((comment) => (
               <Comment
                 key={comment._id}
-                username={comment.userName || "Anonymous"}
+                username={comment.userName || comment.userEmail || "Anonymous"}
                 text={comment.text}
                 avatarUrl={comment.userImage || ""}
                 onLike={() => !isLiking && handleLike(comment._id || "")}

@@ -56,7 +56,7 @@ const Rumble = () => {
       [0, 0]
     );
 
-    const [snippet1Votes, snippet2Votes] = voteCounts;
+    const [snippet1Votes, snippet2Votes] = voteCounts || [];
 
     if (snippet1Votes > snippet2Votes) return snippets[0]._id;
     if (snippet2Votes > snippet1Votes) return snippets[1]._id;

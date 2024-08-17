@@ -4,6 +4,7 @@ const commentSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   userImage: { type: String },
   userName: { type: String },
+  userEmail: { type: String },
   text: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   likes: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
