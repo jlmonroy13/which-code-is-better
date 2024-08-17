@@ -5,10 +5,13 @@ import { useRumble } from "@/context/rumbleContext";
 import cx from "classnames";
 import { Orbitron } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { useLocalStorage } from "usehooks-ts";
 import CodeSnippet from "../CodeSnippet";
 import CommentsSection from "../CommentsSection";
+import Modal from "../Modal";
 import SideMenu from "../SideMenu";
 
 const orbitron = Orbitron({ subsets: ["latin"] });
@@ -17,6 +20,11 @@ const Rumble = () => {
   const { session } = useAuth();
   const { rumble } = useRumble();
   const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalTriggered, setIsModalTriggered] = useLocalStorage(
+    "isModalTriggered",
+    false
+  );
 
   const toggleSideMenu = () => {
     setIsSideMenuVisible(!isSideMenuVisible);
@@ -24,6 +32,15 @@ const Rumble = () => {
 
   const closeSideMenu = () => {
     setIsSideMenuVisible(false);
+  };
+
+  const toggleModal = () => {
+    if (!isModalTriggered) setIsModalTriggered(true);
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const onUserVote = () => {
+    if (!isModalTriggered) toggleModal();
   };
 
   const rumbleWinner = useMemo(() => {
@@ -114,6 +131,7 @@ const Rumble = () => {
                   hasVoted={hasVotedSnipped1}
                   id={snippet1._id}
                   language={snippet1.language}
+                  onUserVote={onUserVote}
                   rumbleWinner={rumbleWinner}
                 />
                 <Image
@@ -136,6 +154,7 @@ const Rumble = () => {
                 hasVoted={hasVotedSnipped2}
                 id={snippet2._id}
                 language={snippet2.language}
+                onUserVote={onUserVote}
                 rumbleWinner={rumbleWinner}
               />
             )}
@@ -146,6 +165,27 @@ const Rumble = () => {
         </div>
         <SideMenu isVisible={isSideMenuVisible} onClose={closeSideMenu} />
       </div>
+      <Modal isOpen={isModalOpen} close={toggleModal}>
+        <h1 className="font-bold text-lg mb-4">Thanks for Voting! 🌟</h1>
+        <div className="flex flex-col gap-3 text-neutral-300">
+          <p>
+            Join our community on Discord to discuss the results, share
+            insights, and connect with other passionate developers. Be the first
+            to know when a rumble ends and a new one begins!
+          </p>
+          <p>
+            👉{" "}
+            <Link
+              className="transition-colors duration-300 hover:text-primary text-base underline"
+              target="_blank"
+              href="https://discord.gg/j2VQ3UAbWB"
+            >
+              Join Our Discord
+            </Link>
+          </p>
+          <p>Let&apos;s build better code together!</p>
+        </div>
+      </Modal>
     </>
   );
 };

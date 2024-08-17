@@ -9,14 +9,17 @@ import { toast } from "react-toastify";
 import CodeSnippet from "./CodeSnippet";
 import { CodeSnippetProps } from "./CodeSnippet.types";
 
-const CodeSnippetContainer: React.FC<
-  Omit<CodeSnippetProps, "onVote" | "isVoting" | "isRumbleActive">
-> = (props) => {
+interface CodeSnippetContainerProps
+  extends Omit<CodeSnippetProps, "onVote" | "isVoting" | "isRumbleActive"> {
+  onUserVote?(): void;
+}
+
+const CodeSnippetContainer: React.FC<CodeSnippetContainerProps> = (props) => {
   const router = useRouter();
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
   const { rumble, updateRumble } = useRumble();
-  const { id } = props;
+  const { id, onUserVote } = props;
 
   const isRumbleActive = useMemo(
     () => getCurrentWeek() === rumble?.rumbleWeek,
@@ -53,6 +56,7 @@ const CodeSnippetContainer: React.FC<
           votes,
         });
         toast.success("Vote submitted successfully!");
+        onUserVote?.();
       }
     } catch (error) {
       console.error(error);

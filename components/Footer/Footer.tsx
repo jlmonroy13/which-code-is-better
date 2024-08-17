@@ -38,7 +38,7 @@ const Footer = () => {
         <Link
           className="transition-colors duration-300 hover:text-primary text-3xl"
           target="_blank"
-          href="https://discord.gg/cT3dssAs"
+          href="https://discord.gg/j2VQ3UAbWB"
         >
           <FaDiscord />
         </Link>
