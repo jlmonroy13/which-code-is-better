@@ -1,5 +1,4 @@
 "use client";
-import { getCurrentWeek } from "@/utils/date";
 import useSWRMutation from "swr/mutation";
 
 const postData = (url: string, { arg }: { arg: object }) => {
@@ -11,54 +10,25 @@ const postData = (url: string, { arg }: { arg: object }) => {
 };
 
 const rumbleData = {
-  title: "Switch vs. If-Else22",
+  title: "Positional Arguments vs. Object Destructuring",
   snippets: [
     {
-      code: `function performAction(actionType, actionValue) {
-  switch (actionType) {
-    case "add":
-      console.log("Adding 10:", 10 + actionValue);
-      break;
-    case "subtract":
-      console.log("Subtracting 5:", actionValue - 5);
-      break;
-    case "greet":
-      console.log("Hello,", actionValue);
-      break;
-    default:
-      console.log("Unknown action type.");
-      break;
-  }
+      code: `function createUser(firstName, lastName, age) {
+  console.log(\`User Created: \${firstName} \${lastName}, Age: \${age}\`);
 }
 
-// Example usage:
-performAction("add", 15); // Output: Adding 10: 25
-performAction("subtract", 20); // Output: Subtracting 5: 15
-performAction("greet", "Selvio"); // Output: Hello, Selvio
-performAction("jump"); // Output: Unknown action type.
+createUser("John", "Doe", 30);
 `,
-      language: "javascript",
+      language: "jsx",
     },
     {
-      code: `function performAction(actionType, actionValue) {
-  if (actionType === "add") {
-    console.log("Adding 10:", 10 + actionValue);
-  } else if (actionType === "subtract") {
-    console.log("Subtracting 5:", actionValue - 5);
-  } else if (actionType === "greet") {
-    console.log("Hello,", actionValue);
-  } else {
-    console.log("Unknown action type.");
-  }
+      code: `function createUser({ firstName, lastName, age }) {
+  console.log(\`User Created: \${firstName} \${lastName}, Age: \${age}\`);
 }
 
-// Example usage:
-performAction("add", 15); // Output: Adding 10: 25
-performAction("subtract", 20); // Output: Subtracting 5: 15
-performAction("greet", "Selvio"); // Output: Hello, Selvio
-performAction("jump"); // Output: Unknown action type.
+createUser({ firstName: "John", lastName: "Doe", age: 30 });
 `,
-      language: "javascript",
+      language: "jsx",
     },
   ],
 };
@@ -69,7 +39,7 @@ const CreateRumbleButton = () => {
   const onClick = async () => {
     trigger({
       ...rumbleData,
-      rumbleWeek: getCurrentWeek(),
+      rumbleWeek: "2025-W3",
     });
   };
 
