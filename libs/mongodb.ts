@@ -6,7 +6,6 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-// Add this type definition
 type CachedMongoose = {
   conn: mongoose.Connection | null;
   promise: Promise<mongoose.Connection> | null;
