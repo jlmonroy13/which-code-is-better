@@ -1,27 +1,33 @@
 "use client";
 import { RumbleInterface } from "@/types/rumble";
-import { getRumbles } from "@/utils/api/rumble";
+import { BASE_API_URL } from "@/utils/api/rumble";
 import { getCurrentWeek } from "@/utils/date";
 import cx from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
+import useSWR from "swr";
 
 interface SideMenuProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 function SideMenu({ isVisible, onClose }: SideMenuProps) {
   const [rumbles, setRumbles] = useState<RumbleInterface[]>([]);
   const [selectedRumble, setSelectedRumble] = useState<string | null>(null);
   const pathname = usePathname();
+  const { data, error, isLoading } = useSWR<RumbleInterface[]>(
+    `${BASE_API_URL}/api/rumble?filter=presentAndPast`,
+    fetcher
+  );
 
   useEffect(() => {
-    const fetchRumbles = async () => {
-      const fetchedRumbles = await getRumbles("presentAndPast");
-      const sortedRumbles = fetchedRumbles.sort((a, b) =>
+    if (data) {
+      const sortedRumbles = data.sort((a, b) =>
         b.rumbleWeek.localeCompare(a.rumbleWeek)
       );
       setRumbles(sortedRumbles);
@@ -44,9 +50,17 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           setSelectedRumble(sortedRumbles[0].rumbleWeek);
         }
       }
-    };
-    fetchRumbles();
-  }, [pathname]);
+    }
+  }, [pathname, data]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (error) {
+    console.error("Error fetching rumbles:", error);
+    return null;
+  }
 
   return (
     <>

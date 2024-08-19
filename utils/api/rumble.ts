@@ -2,9 +2,8 @@ import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import { RumbleInterface } from "@/types/rumble";
 import { UserInterface } from "@/types/user";
-import { getCurrentWeek } from '@/utils/date';
 
-const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
+export const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
 export const RUMBLE_URL = (rumbleWeek: string) => `/api/rumble/${rumbleWeek}`;
 

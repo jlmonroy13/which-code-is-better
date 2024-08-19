@@ -92,7 +92,7 @@ const Rumble = () => {
 
   return (
     <>
-      <div className="bg-base-100 relative w-full">
+      <div className="bg-base-100 relative w-full h-full">
         <button
           onClick={toggleSideMenu}
           className="flex items-center gap-2 bg-neutral text-neutral-content px-3 py-2 rounded absolute top-4 left-5 z-10 hover:text-white transition-colors shadow-md capitalize"

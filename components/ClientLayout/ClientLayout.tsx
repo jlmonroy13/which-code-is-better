@@ -11,9 +11,9 @@ interface ClientLayoutProps {
 
 function ClientLayout({ user, children }: ClientLayoutProps) {
   return (
-    <div className="relative min-h-svh flex flex-col">
+    <div className="relative min-h-svh grid grid-rows-[max-content_1fr_max-content]">
       <Header user={user} />
-      <main className="flex-1 flex items-center justify-center">{children}</main>
+      <main className="flex items-center justify-center">{children}</main>
       <Footer />
     </div>
   );
