@@ -1,6 +1,7 @@
-import { useAuth } from '@/context/authContext';
+import { useEffect, useState } from "react";
+
+import { useAuth } from "@/context/authContext";
 import { useRumble } from "@/context/rumbleContext";
-import { useEffect, useState } from 'react';
 
 interface useCommentsProps {
   hasVoted: boolean;
@@ -77,7 +78,9 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
       setIsDeleting(true);
       await updateRumble({
         ...rumble,
-        comments: rumble.comments.filter((comment) => comment._id !== commentId),
+        comments: rumble.comments.filter(
+          (comment) => comment._id !== commentId,
+        ),
       });
     } catch (error) {
       console.error(error);
@@ -88,7 +91,7 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
 
   const handleInputComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-  }
+  };
 
   return {
     user,
@@ -105,4 +108,4 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
   };
 };
 
-export default useComments
+export default useComments;

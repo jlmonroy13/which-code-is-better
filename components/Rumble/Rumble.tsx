@@ -1,7 +1,5 @@
 "use client";
 
-import { useAuth } from "@/context/authContext";
-import { useRumble } from "@/context/rumbleContext";
 import cx from "classnames";
 import { Orbitron } from "next/font/google";
 import Image from "next/image";
@@ -9,6 +7,10 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { useLocalStorage } from "usehooks-ts";
+
+import { useAuth } from "@/context/authContext";
+import { useRumble } from "@/context/rumbleContext";
+
 import CodeSnippet from "../CodeSnippet";
 import CommentsSection from "../CommentsSection";
 import Modal from "../Modal";
@@ -23,7 +25,7 @@ const Rumble = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalTriggered, setIsModalTriggered] = useLocalStorage(
     "isModalTriggered",
-    false
+    false,
   );
 
   const toggleSideMenu = () => {
@@ -53,7 +55,7 @@ const Rumble = () => {
         if (snippetId === snippets[1]._id) counts[1]++;
         return counts;
       },
-      [0, 0]
+      [0, 0],
     );
 
     const [snippet1Votes, snippet2Votes] = voteCounts || [];
@@ -85,7 +87,7 @@ const Rumble = () => {
   const { snippets, title } = rumble;
   const [snippet1, snippet2] = snippets;
   const userVote = rumble.votes.find(
-    ({ userId }) => userId === session?.user?.id
+    ({ userId }) => userId === session?.user?.id,
   );
   const hasVotedSnipped1 = userVote?.snippetId === snippet1._id;
   const hasVotedSnipped2 = userVote?.snippetId === snippet2._id;
@@ -104,7 +106,7 @@ const Rumble = () => {
             <h1
               className={cx(
                 "text-4xl font-bold text-center mb-6 text-white",
-                orbitron.className
+                orbitron.className,
               )}
             >
               Which Code Is Better?
@@ -141,7 +143,7 @@ const Rumble = () => {
                   alt="vs"
                   className={cx(
                     "absolute bottom-0 z-20 translate-y-1/2 right-1/2 translate-x-1/2",
-                    "sm:-right-10 sm:translate-x-0 sm:bottom-1/2"
+                    "sm:-right-10 sm:translate-x-0 sm:bottom-1/2",
                   )}
                 />
               </div>

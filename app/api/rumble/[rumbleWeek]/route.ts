@@ -1,13 +1,14 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
 import User from "@/models/user"; // Added this import
 import { RumbleInterface } from "@/types/rumble";
 import { populateUserOnRumbleComments } from "@/utils/api/rumble";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { rumbleWeek: string } }
+  { params }: { params: { rumbleWeek: string } },
 ) {
   try {
     const { rumbleWeek } = params;
@@ -20,7 +21,7 @@ export async function PUT(
     if (!updatedRumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -32,14 +33,14 @@ export async function PUT(
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating rumble", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { rumbleWeek: string } }
+  { params }: { params: { rumbleWeek: string } },
 ) {
   try {
     const { rumbleWeek } = params;
@@ -54,7 +55,7 @@ export async function GET(
     if (!rumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     // Merge populated data with original user ID
@@ -66,14 +67,14 @@ export async function GET(
     console.error("error", error);
     return NextResponse.json(
       { message: "Error fetching rumble", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { rumbleWeek: string } }
+  { params }: { params: { rumbleWeek: string } },
 ) {
   try {
     const { rumbleWeek } = params;
@@ -82,21 +83,21 @@ export async function DELETE(
     if (!result) {
       return NextResponse.json(
         { message: "Rumble not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
     return NextResponse.json({ message: "Rumble deleted" }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Error deleting rumble", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { rumbleWeek: string } }
+  { params }: { params: { rumbleWeek: string } },
 ) {
   try {
     const { rumbleWeek } = params;
@@ -122,7 +123,7 @@ export async function PATCH(
     if (!updatedRumble) {
       return NextResponse.json(
         { message: "Rumble not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -139,7 +140,7 @@ export async function PATCH(
         error: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

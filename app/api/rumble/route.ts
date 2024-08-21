@@ -1,7 +1,8 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import connectMongoDB from "@/libs/mongodb";
 import Rumble from "@/models/rumble";
-import { NextRequest, NextResponse } from "next/server";
-import { getCurrentWeek } from '@/utils/date';
+import { getCurrentWeek } from "@/utils/date";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,30 +11,30 @@ export async function POST(request: NextRequest) {
     if (!data || Object.keys(data).length === 0) {
       return NextResponse.json(
         { message: "Invalid data provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     if (!data.rumbleWeek) {
       return NextResponse.json(
         { message: "rumbleWeek is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     if (!data.title) {
       return NextResponse.json(
         { message: "title is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const rumble = await Rumble.create(data);
     return NextResponse.json(
       { message: "Rumble created", rumble },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Error creating rumble", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -54,7 +55,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch rumbles", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -67,7 +68,7 @@ export async function DELETE(request: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { message: "Rumble ID is missing" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -77,13 +78,13 @@ export async function DELETE(request: NextRequest) {
     } else {
       return NextResponse.json(
         { message: "Rumble not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
   } catch (error) {
     return NextResponse.json(
       { message: "Error deleting rumble", error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,7 +1,8 @@
 "use client";
-import { ROUTES } from "@/routes";
 import { usePathname } from "next/navigation";
 import { ReactNode, useMemo } from "react";
+
+import { ROUTES } from "@/routes";
 
 interface LayoutProps {
   children: ReactNode;

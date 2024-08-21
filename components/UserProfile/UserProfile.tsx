@@ -1,6 +1,3 @@
-import { useAuth } from "@/context/authContext";
-import { ROUTES } from "@/routes";
-import { UserInterface } from "@/types/user";
 import {
   Menu,
   MenuButton,
@@ -13,6 +10,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import { FaUser } from "react-icons/fa";
+
+import { useAuth } from "@/context/authContext";
+import { ROUTES } from "@/routes";
+import { UserInterface } from "@/types/user";
 
 interface UserProfileProps {
   user?: UserInterface | null;

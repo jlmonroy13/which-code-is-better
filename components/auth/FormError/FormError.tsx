@@ -1,6 +1,5 @@
 import { BiSolidError } from "react-icons/bi";
 
-
 type FormErrorProps = {
   message?: string;
 };

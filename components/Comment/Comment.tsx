@@ -82,5 +82,4 @@ const Comment: React.FC<CommentProps> = ({
   </div>
 );
 
-
 export default Comment;

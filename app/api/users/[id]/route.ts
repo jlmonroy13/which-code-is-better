@@ -1,7 +1,7 @@
-import connectMongoDB from "@/libs/mongodb";
-import User from "@/models/user";
 import { NextRequest, NextResponse } from "next/server";
 
+import connectMongoDB from "@/libs/mongodb";
+import User from "@/models/user";
 
 export async function GET(
   _request: NextRequest,
@@ -31,13 +31,9 @@ export async function PATCH(
     const userId = params.id;
     await connectMongoDB();
     const data = await request.json();
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      data,
-      {
-        new: true,
-      },
-    );
+    const updatedUser = await User.findByIdAndUpdate(userId, data, {
+      new: true,
+    });
     if (!updatedUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }

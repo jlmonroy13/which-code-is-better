@@ -1,11 +1,13 @@
 "use client";
 
-import { useAuth } from "@/context/authContext";
-import { useRumble } from "@/context/rumbleContext";
-import { getCurrentWeek } from "@/utils/date";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
+
+import { useAuth } from "@/context/authContext";
+import { useRumble } from "@/context/rumbleContext";
+import { getCurrentWeek } from "@/utils/date";
+
 import CodeSnippet from "./CodeSnippet";
 import { CodeSnippetProps } from "./CodeSnippet.types";
 
@@ -23,7 +25,7 @@ const CodeSnippetContainer: React.FC<CodeSnippetContainerProps> = (props) => {
 
   const isRumbleActive = useMemo(
     () => getCurrentWeek() === rumble?.rumbleWeek,
-    [rumble?.rumbleWeek]
+    [rumble?.rumbleWeek],
   );
 
   const onVote = async () => {

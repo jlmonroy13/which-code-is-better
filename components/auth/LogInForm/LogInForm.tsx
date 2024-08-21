@@ -1,16 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import Input from "@/components/Input";
 import { FormProvider, useForm } from "react-hook-form";
 import { AiFillGithub } from "react-icons/ai";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LoginSchema } from "@/schemas";
+
 import { loginWithMagicLink, logInWithGithub } from "@/actions/loginAction";
 import FormError from "@/components/auth/FormError";
-
-
+import Input from "@/components/Input";
+import { LoginSchema } from "@/schemas";
 
 type FormData = z.infer<typeof LoginSchema>;
 
@@ -31,7 +30,7 @@ const LogInForm = () => {
       loginWithMagicLink(data).then((data) => {
         setError(data.error);
       });
-    })
+    });
   };
 
   return (

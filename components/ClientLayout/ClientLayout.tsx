@@ -2,6 +2,7 @@
 
 import Header from "@/components/Header";
 import { UserInterface } from "@/types/user";
+
 import Footer from "../Footer";
 
 interface ClientLayoutProps {

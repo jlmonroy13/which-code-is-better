@@ -1,12 +1,13 @@
-import { auth } from "@/auth";
-import ClientLayout from "@/components/ClientLayout";
-import { AuthProvider } from "@/context/authContext";
-import { getUser } from "@/utils/api/user";
 import { GoogleTagManager } from "@next/third-parties/google";
 import cx from "classnames";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+
+import { auth } from "@/auth";
+import ClientLayout from "@/components/ClientLayout";
+import { AuthProvider } from "@/context/authContext";
+import { getUser } from "@/utils/api/user";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -39,9 +40,7 @@ export default async function RootLayout({
       {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <AuthProvider user={user} session={session}>
         <body className={cx(inter.className, "bg-base-100")}>
-          <ClientLayout user={user}>
-            {children}
-          </ClientLayout>
+          <ClientLayout user={user}>{children}</ClientLayout>
           <ToastContainer hideProgressBar />
         </body>
       </AuthProvider>

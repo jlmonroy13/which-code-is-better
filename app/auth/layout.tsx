@@ -1,5 +1,6 @@
-import Layout from "@/components/auth/Layout";
 import { ReactNode } from "react";
+
+import Layout from "@/components/auth/Layout";
 
 interface AuthLayoutProps {
   children: ReactNode;

@@ -1,13 +1,14 @@
 "use client";
-import { RumbleInterface } from "@/types/rumble";
-import { BASE_API_URL } from "@/utils/api/rumble";
-import { getCurrentWeek } from "@/utils/date";
 import cx from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import useSWR from "swr";
+
+import { RumbleInterface } from "@/types/rumble";
+import { BASE_API_URL } from "@/utils/api/rumble";
+import { getCurrentWeek } from "@/utils/date";
 
 interface SideMenuProps {
   isVisible: boolean;
@@ -22,13 +23,13 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
   const pathname = usePathname();
   const { data, error, isLoading } = useSWR<RumbleInterface[]>(
     `${BASE_API_URL}/api/rumble?filter=presentAndPast`,
-    fetcher
+    fetcher,
   );
 
   useEffect(() => {
     if (data) {
       const sortedRumbles = data.sort((a, b) =>
-        b.rumbleWeek.localeCompare(a.rumbleWeek)
+        b.rumbleWeek.localeCompare(a.rumbleWeek),
       );
       setRumbles(sortedRumbles);
 
@@ -42,7 +43,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
         setSelectedRumble(weekFromUrl);
       } else {
         const currentWeekRumble = sortedRumbles.find(
-          (rumble) => rumble.rumbleWeek === currentWeek
+          (rumble) => rumble.rumbleWeek === currentWeek,
         );
         if (currentWeekRumble) {
           setSelectedRumble(currentWeekRumble.rumbleWeek);
@@ -70,7 +71,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           {
             "opacity-100 pointer-events-auto": isVisible,
             "opacity-0 pointer-events-none": !isVisible,
-          }
+          },
         )}
         onClick={onClose}
       />
@@ -80,7 +81,7 @@ function SideMenu({ isVisible, onClose }: SideMenuProps) {
           {
             "translate-x-0": isVisible,
             "-translate-x-full": !isVisible,
-          }
+          },
         )}
       >
         <div className="flex justify-between items-center py-4 pl-4 pr-2">

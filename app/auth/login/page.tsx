@@ -1,9 +1,7 @@
-import LogInForm from "@/components/auth/LogInForm"
+import LogInForm from "@/components/auth/LogInForm";
 
 const LoginPage = () => {
-  return (
-    <LogInForm />
-  )
-}
+  return <LogInForm />;
+};
 
-export default LoginPage
+export default LoginPage;
