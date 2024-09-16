@@ -9,7 +9,7 @@ interface useCommentsProps {
 
 const useComments = ({ hasVoted }: useCommentsProps) => {
   const { user } = useAuth();
-  const { rumble, updateRumble } = useRumble();
+  const { rumble, createComment, deleteComment, likeComment } = useRumble();
   const [isLiking, setIsLiking] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -21,25 +21,7 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
     if (!user || !rumble) return null;
     try {
       setIsLiking(true);
-      const updatedComments = rumble.comments.map((comment) => {
-        if (comment._id === commentId) {
-          if (comment.likes.includes(user._id)) {
-            return {
-              ...comment,
-              likes: comment.likes.filter((like) => like !== user._id),
-            };
-          }
-          return {
-            ...comment,
-            likes: [...comment.likes, user._id],
-          };
-        }
-        return comment;
-      });
-      await updateRumble({
-        ...rumble,
-        comments: updatedComments,
-      });
+      await likeComment(commentId, user.id);
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,18 +35,14 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
   }, [rumble?.comments]);
 
   const handleSubmitComment = async () => {
-    if (!user || !comment) return null;
+    if (!user || !comment || !rumble) return null;
     try {
-      const newComment = {
-        userId: user._id,
-        text: comment,
-        likes: [],
-      };
-      await updateRumble({
-        ...rumble,
-        comments: [newComment, ...(rumble?.comments || [])],
-      });
-      setComment("");
+      setIsCommenting(true);
+      const newComment = await createComment(comment, user.id);
+      if (newComment) {
+        setComments((prevComments) => [newComment, ...prevComments]);
+        setComment("");
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -73,17 +51,15 @@ const useComments = ({ hasVoted }: useCommentsProps) => {
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!rumble || !commentId) return null;
+    if (!rumble) return;
     try {
       setIsDeleting(true);
-      await updateRumble({
-        ...rumble,
-        comments: rumble.comments.filter(
-          (comment) => comment._id !== commentId,
-        ),
-      });
+      await deleteComment(commentId);
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId),
+      );
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting comment:", error);
     } finally {
       setIsDeleting(false);
     }

@@ -1,0 +1,129 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  image         String?
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  comments      Comment[]
+  votes         Vote[]
+  commentLikes CommentLike[]
+
+  @@map("users")
+}
+
+model Rumble {
+  id         String    @id @default(cuid())
+  rumbleWeek String    @unique
+  createdAt  DateTime  @default(now())
+  title      String    @unique
+  comments   Comment[]
+  snippets   Snippet[]
+  votes      Vote[]
+
+  @@map("rumbles")
+}
+
+model Snippet {
+  id       String @id @default(cuid())
+  code     String
+  language String
+  rumbleId String
+  rumble   Rumble @relation(fields: [rumbleId], references: [id])
+  votes    Vote[]
+
+  @@map("snippets")
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  userId    String
+  snippetId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  snippet   Snippet  @relation(fields: [snippetId], references: [id])
+  rumble    Rumble   @relation(fields: [rumbleId], references: [id])
+  rumbleId  String
+
+  @@unique([userId, snippetId])
+  @@map("votes")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  userId    String
+  rumbleId  String
+  user      User     @relation(fields: [userId], references: [id])
+  rumble    Rumble   @relation(fields: [rumbleId], references: [id])
+  likes     CommentLike[]
+
+  @@map("comments")
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
+  userId    String
+  commentId String
+  user      User     @relation(fields: [userId], references: [id])
+  comment   Comment  @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, commentId])
+  @@map("comment_likes")
+}

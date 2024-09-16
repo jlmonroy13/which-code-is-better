@@ -20,7 +20,7 @@ const CodeSnippetContainer: React.FC<CodeSnippetContainerProps> = (props) => {
   const router = useRouter();
   const { user } = useAuth();
   const [isVoting, setIsVoting] = useState(false);
-  const { rumble, updateRumble } = useRumble();
+  const { rumble, voteForSnippet } = useRumble();
   const { id, onUserVote } = props;
 
   const isRumbleActive = useMemo(
@@ -32,34 +32,23 @@ const CodeSnippetContainer: React.FC<CodeSnippetContainerProps> = (props) => {
     try {
       if (!user) {
         router.push("/auth/login");
-      } else if (!isRumbleActive) {
         return;
-      } else if (rumble) {
-        setIsVoting(true);
-        let votes = rumble.votes;
-        if (!votes.some(({ userId }) => userId === user._id)) {
-          votes.push({
-            userId: user._id,
-            snippetId: id,
-          });
-        } else {
-          votes = votes.map((vote) => {
-            if (vote.userId === user._id) {
-              return {
-                ...vote,
-                snippetId: id,
-              };
-            }
-            return vote;
-          });
-        }
-        await updateRumble({
-          ...rumble,
-          votes,
-        });
-        toast.success("Vote submitted successfully!");
-        onUserVote?.();
       }
+
+      if (!isRumbleActive) {
+        toast.error("This rumble is not currently active.");
+        return;
+      }
+
+      if (!rumble) {
+        toast.error("No active rumble found.");
+        return;
+      }
+
+      setIsVoting(true);
+      await voteForSnippet(user.id, id);
+      toast.success("Vote submitted successfully!");
+      onUserVote?.();
     } catch (error) {
       console.error(error);
       toast.error("An error occurred, please try voting again.");

@@ -1,7 +1,7 @@
+import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-import connectMongoDB from "@/libs/mongodb";
-import User from "@/models/user";
+const prisma = new PrismaClient();
 
 export async function GET(
   _request: NextRequest,
@@ -9,9 +9,11 @@ export async function GET(
 ) {
   try {
     const userId = params.id;
-    await connectMongoDB();
 
-    const user = await User.findById(userId);
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -29,17 +31,22 @@ export async function PATCH(
 ) {
   try {
     const userId = params.id;
-    await connectMongoDB();
     const data = await request.json();
-    const updatedUser = await User.findByIdAndUpdate(userId, data, {
-      new: true,
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data,
     });
+
     if (!updatedUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (err) {
+    if (err instanceof Error && "code" in err && err.code === "P2025") {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
     console.error(err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }

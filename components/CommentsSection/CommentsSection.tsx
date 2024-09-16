@@ -55,18 +55,18 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ hasVoted }) => {
         ) : comments.length > 0 ? (
           comments.map((comment) => (
             <Comment
-              key={comment._id}
-              username={comment.userName || comment.userEmail || "Anonymous"}
+              key={comment.id}
+              username={comment.user.name || comment.user.email || "Anonymous"}
               text={comment.text}
-              avatarUrl={comment.userImage || ""}
-              onLike={() => !isLiking && handleLike(comment._id || "")}
-              onDelete={() =>
-                !isDeleting && handleDeleteComment(comment._id || "")
-              }
+              avatarUrl={comment.user.image || ""}
+              onLike={() => !isLiking && handleLike(comment.id)}
+              onDelete={() => !isDeleting && handleDeleteComment(comment.id)}
               timestamp={comment.createdAt || new Date()}
-              isOwner={comment.userId === user._id}
+              isOwner={comment.userId === user.id}
               isDeleting={isDeleting}
-              hasLiked={comment.likes?.includes(user._id)}
+              hasLiked={
+                !!comment.likes?.some(({ userId }) => userId === user.id)
+              }
               likes={comment.likes?.length || 0}
             />
           ))

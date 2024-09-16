@@ -51,8 +51,8 @@ const Rumble = () => {
     const { votes, snippets } = rumble;
     const voteCounts = votes?.reduce(
       (counts, { snippetId }) => {
-        if (snippetId === snippets[0]._id) counts[0]++;
-        if (snippetId === snippets[1]._id) counts[1]++;
+        if (snippetId === snippets[0].id) counts[0]++;
+        if (snippetId === snippets[1].id) counts[1]++;
         return counts;
       },
       [0, 0],
@@ -60,11 +60,11 @@ const Rumble = () => {
 
     const [snippet1Votes, snippet2Votes] = voteCounts || [];
 
-    if (snippet1Votes > snippet2Votes) return snippets[0]._id;
-    if (snippet2Votes > snippet1Votes) return snippets[1]._id;
+    if (snippet1Votes > snippet2Votes) return snippets[0].id;
+    if (snippet2Votes > snippet1Votes) return snippets[1].id;
   }, [rumble]);
 
-  if (!rumble?._id) {
+  if (!rumble?.id) {
     return (
       <>
         <div className="max-w-2xl text-2xl mx-auto p-6 text-center h-full flex flex-col items-center justify-center">
@@ -89,8 +89,8 @@ const Rumble = () => {
   const userVote = rumble.votes.find(
     ({ userId }) => userId === session?.user?.id,
   );
-  const hasVotedSnipped1 = userVote?.snippetId === snippet1._id;
-  const hasVotedSnipped2 = userVote?.snippetId === snippet2._id;
+  const hasVotedSnipped1 = userVote?.snippetId === snippet1.id;
+  const hasVotedSnipped2 = userVote?.snippetId === snippet2.id;
 
   return (
     <>
@@ -124,14 +124,14 @@ const Rumble = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 relative">
-            {snippet1._id && (
+            {snippet1.id && (
               <div className="relative">
                 <CodeSnippet
                   className="ml-auto"
                   code={snippet1.code}
                   containerClassName="bg-gradient-to-t from-red-500 to-base-100"
                   hasVoted={hasVotedSnipped1}
-                  id={snippet1._id}
+                  id={snippet1.id}
                   language={snippet1.language}
                   onUserVote={onUserVote}
                   rumbleWinner={rumbleWinner}
@@ -148,13 +148,13 @@ const Rumble = () => {
                 />
               </div>
             )}
-            {snippet2._id && (
+            {snippet2.id && (
               <CodeSnippet
                 className="mr-auto"
                 code={snippet2.code}
                 containerClassName="bg-gradient-to-t from-blue-500 to-base-100"
                 hasVoted={hasVotedSnipped2}
-                id={snippet2._id}
+                id={snippet2.id}
                 language={snippet2.language}
                 onUserVote={onUserVote}
                 rumbleWinner={rumbleWinner}

@@ -1,39 +1,70 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import connectMongoDB from "@/libs/mongodb";
-import Rumble from "@/models/rumble";
+import prisma from "@/libs/prisma";
 import { getCurrentWeek } from "@/utils/date";
 
 export async function POST(request: NextRequest) {
   try {
-    await connectMongoDB();
-    const data = await request.json();
-    if (!data || Object.keys(data).length === 0) {
+    const body = await request.json();
+    const { title, rumbleWeek, snippets } = body;
+
+    // Validate input
+    if (
+      !title ||
+      !rumbleWeek ||
+      !Array.isArray(snippets) ||
+      snippets.length === 0
+    ) {
       return NextResponse.json(
-        { message: "Invalid data provided" },
+        {
+          message:
+            "Invalid input. Title, rumbleWeek, and non-empty snippets array are required.",
+        },
         { status: 400 },
       );
     }
-    if (!data.rumbleWeek) {
-      return NextResponse.json(
-        { message: "rumbleWeek is required" },
-        { status: 400 },
-      );
+
+    // Validate each snippet
+    for (const snippet of snippets) {
+      if (
+        typeof snippet.code !== "string" ||
+        typeof snippet.language !== "string"
+      ) {
+        return NextResponse.json(
+          {
+            message: "Each snippet must have 'code' and 'language' as strings.",
+          },
+          { status: 400 },
+        );
+      }
     }
-    if (!data.title) {
-      return NextResponse.json(
-        { message: "title is required" },
-        { status: 400 },
-      );
-    }
-    const rumble = await Rumble.create(data);
-    return NextResponse.json(
-      { message: "Rumble created", rumble },
-      { status: 201 },
-    );
+
+    // Create the Rumble with snippets
+    const newRumble = await prisma.rumble.create({
+      data: {
+        title,
+        rumbleWeek,
+        snippets: {
+          create: snippets.map((snippet) => ({
+            code: snippet.code,
+            language: snippet.language,
+          })),
+        },
+      },
+      include: {
+        snippets: true,
+      },
+    });
+
+    return NextResponse.json(newRumble);
   } catch (error) {
+    console.error("Error creating rumble:", error);
     return NextResponse.json(
-      { message: "Error creating rumble", error },
+      {
+        message: "Error creating rumble",
+        details:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
       { status: 500 },
     );
   }
@@ -41,16 +72,18 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    await connectMongoDB();
     const filterType = request.nextUrl.searchParams.get("filter");
 
-    let query = {};
+    let where = {};
     if (filterType === "presentAndPast") {
       const currentYearWeek = getCurrentWeek();
-      query = { rumbleWeek: { $lte: currentYearWeek } };
+      where = { rumbleWeek: { lte: currentYearWeek } };
     }
 
-    const rumbles = await Rumble.find(query).sort({ rumbleWeek: -1 });
+    const rumbles = await prisma.rumble.findMany({
+      where,
+      orderBy: { rumbleWeek: "desc" },
+    });
     return NextResponse.json(rumbles, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -62,7 +95,6 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    await connectMongoDB();
     const id = request.nextUrl.searchParams.get("id");
 
     if (!id) {
@@ -72,7 +104,10 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const deletionResult = await Rumble.findByIdAndDelete(id);
+    const deletionResult = await prisma.rumble.delete({
+      where: { id },
+    });
+
     if (deletionResult) {
       return NextResponse.json({ message: "Rumble deleted" }, { status: 200 });
     } else {
@@ -82,6 +117,12 @@ export async function DELETE(request: NextRequest) {
       );
     }
   } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "P2025") {
+      return NextResponse.json(
+        { message: "Rumble not found" },
+        { status: 404 },
+      );
+    }
     return NextResponse.json(
       { message: "Error deleting rumble", error },
       { status: 500 },

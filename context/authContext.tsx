@@ -1,12 +1,13 @@
 "use client";
 
+import { Session } from "next-auth";
+import { createContext, useContext, useState } from "react";
+import useSWRMutation from "swr/mutation";
+
 import { signOut } from "@/actions/signOutAction";
 import { UserInterface } from "@/types/user";
 import { getFetcher } from "@/utils/api/fetcher";
 import { USER_URL, updateUserFetcher } from "@/utils/api/user";
-import { Session } from "next-auth";
-import { createContext, useContext, useState } from "react";
-import useSWRMutation from "swr/mutation";
 
 interface AuthContextProps {
   user?: UserInterface | null;
@@ -31,12 +32,12 @@ export const AuthProvider = ({
 }: AuthProviderProps) => {
   const [_user, setUser] = useState<UserInterface | null>(user);
   const { trigger: getUser } = useSWRMutation<UserInterface>(
-    USER_URL(_user?._id || ""),
-    getFetcher
+    USER_URL(_user?.id || ""),
+    getFetcher,
   );
   const { trigger: updateUserTrigger } = useSWRMutation(
-    USER_URL(user?._id || ""),
-    updateUserFetcher
+    USER_URL(user?.id || ""),
+    updateUserFetcher,
   );
 
   const refetchUser = async () => {

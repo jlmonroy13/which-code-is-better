@@ -1,10 +1,8 @@
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import { MongoClient } from "mongodb";
-import authConfig from "@/auth.config";
 
-const client = new MongoClient(process.env.MONGODB_URI as string);
-const clientPromise = client.connect();
+import authConfig from "@/auth.config";
+import { prisma } from "@/prisma";
 
 export const {
   auth,
@@ -12,12 +10,22 @@ export const {
   signOut,
   handlers: { GET, POST },
 } = NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
+  adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
   callbacks: {
     session({ session, user }) {
-      session.user.id = user.id;
+      if (session.user) {
+        session.user.id = user.id;
+      }
       return session;
+    },
+    async signIn({ user, account }) {
+      if (account?.provider === "github") {
+        if ("emailVerified" in user) {
+          user.emailVerified = new Date();
+        }
+      }
+      return true;
     },
   },
   trustHost: true,

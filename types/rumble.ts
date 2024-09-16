@@ -1,29 +1,30 @@
+import { UserInterface } from "./user";
+
 export interface SnippetInterface {
-  _id?: string;
+  id: string;
   code: string;
   language: string;
 }
 
 export interface CommentInterface {
-  _id?: string;
+  id: string;
   userId: string;
-  userImage?: string;
-  userName?: string;
-  userEmail?: string;
+  rumbleId: string;
   text: string;
-  likes: string[];
-  createdAt?: Date;
+  user: UserInterface;
+  likes?: { userId: string }[];
+  createdAt: Date;
 }
 
 export interface VoteInterface {
-  _id?: string;
+  id: string;
   userId: string;
   snippetId: string;
   createdAt?: Date;
 }
 
 export interface RumbleInterface {
-  _id?: string;
+  id: string;
   snippets: SnippetInterface[];
   rumbleWeek: string;
   comments: CommentInterface[];
