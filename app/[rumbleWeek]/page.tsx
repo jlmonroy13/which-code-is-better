@@ -1,6 +1,6 @@
 import Rumble from "@/components/Rumble";
 import { RumbleProvider } from "@/context/rumbleContext";
-import { getRumbleByWeek } from "@/utils/api/rumble";
+import { getRumbleByWeekWithPrisma } from "@/utils/api/rumble";
 
 interface RumblePageProps {
   params: { rumbleWeek: string };
@@ -9,7 +9,7 @@ interface RumblePageProps {
 const RumblePage: React.FC<RumblePageProps> = async ({
   params: { rumbleWeek },
 }) => {
-  const rumble = await getRumbleByWeek(rumbleWeek);
+  const rumble = await getRumbleByWeekWithPrisma(rumbleWeek);
 
   return (
     <RumbleProvider rumble={rumble}>

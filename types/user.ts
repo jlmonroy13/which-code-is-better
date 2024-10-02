@@ -1,7 +1,7 @@
 export interface UserInterface {
   id: string;
-  name: string;
+  name: string | null;
   email: string;
-  image: string;
-  emailVerified: boolean | null;
+  image: string | null;
+  emailVerified?: boolean | null;
 }

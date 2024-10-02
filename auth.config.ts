@@ -1,7 +1,7 @@
+import type { NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
 
-import type { NextAuthConfig } from "next-auth";
 import { sendVerificationRequest } from "@/libs/authSendRequest";
 
 export default {

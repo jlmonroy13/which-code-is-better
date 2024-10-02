@@ -1,3 +1,4 @@
+import prisma from "@/libs/prisma";
 import { CommentInterface, RumbleInterface } from "@/types/rumble";
 import { UserInterface } from "@/types/user";
 
@@ -5,14 +6,42 @@ export const BASE_API_URL = process.env.NEXT_PUBLIC_URL;
 
 export const RUMBLE_URL = (rumbleWeek: string) => `/api/rumble/${rumbleWeek}`;
 
-export const getRumbleByWeek = async (
-  rumbleWeek: string,
-): Promise<RumbleInterface | null> => {
-  const res = await fetch(`${BASE_API_URL}/api/rumble/${rumbleWeek}`);
-  if (res.status === 404) {
-    return null;
-  }
-  return res.json();
+export const getRumbleByWeekWithPrisma = async (rumbleWeek: string) => {
+  const rumble = await prisma.rumble.findUnique({
+    where: { rumbleWeek },
+    include: {
+      comments: {
+        include: {
+          user: {
+            select: { id: true, name: true, image: true, email: true },
+          },
+          likes: {
+            select: { userId: true },
+          },
+        },
+      },
+      snippets: {
+        include: {
+          votes: {
+            include: {
+              user: {
+                select: { id: true },
+              },
+            },
+          },
+        },
+      },
+      votes: {
+        include: {
+          user: {
+            select: { id: true },
+          },
+          snippet: true,
+        },
+      },
+    },
+  });
+  return rumble;
 };
 
 export const updateRumbleFetcher = async (

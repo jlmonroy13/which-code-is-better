@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/libs/prisma";
+import { getRumbleByWeekWithPrisma } from "@/utils/api/rumble";
 
 export async function PUT(
   request: NextRequest,
@@ -69,40 +70,7 @@ export async function GET(
   try {
     const { rumbleWeek } = params;
 
-    const rumble = await prisma.rumble.findUnique({
-      where: { rumbleWeek },
-      include: {
-        comments: {
-          include: {
-            user: {
-              select: { id: true, name: true, image: true, email: true },
-            },
-            likes: {
-              select: { userId: true },
-            },
-          },
-        },
-        snippets: {
-          include: {
-            votes: {
-              include: {
-                user: {
-                  select: { id: true },
-                },
-              },
-            },
-          },
-        },
-        votes: {
-          include: {
-            user: {
-              select: { id: true },
-            },
-            snippet: true,
-          },
-        },
-      },
-    });
+    const rumble = await getRumbleByWeekWithPrisma(rumbleWeek);
 
     return NextResponse.json(rumble, { status: 200 });
   } catch (error) {

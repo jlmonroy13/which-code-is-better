@@ -20,15 +20,18 @@ export interface VoteInterface {
   id: string;
   userId: string;
   snippetId: string;
-  createdAt?: Date;
+  createdAt: Date;
+  rumbleId: string;
+  user: { id: string };
+  snippet?: SnippetInterface;
 }
 
 export interface RumbleInterface {
   id: string;
-  snippets: SnippetInterface[];
   rumbleWeek: string;
-  comments: CommentInterface[];
-  votes: VoteInterface[];
-  createdAt?: Date;
+  createdAt: Date;
   title: string;
+  comments: CommentInterface[];
+  snippets: (SnippetInterface & { rumbleId: string; votes: VoteInterface[] })[];
+  votes: VoteInterface[];
 }
