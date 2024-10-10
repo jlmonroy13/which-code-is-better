@@ -9,7 +9,7 @@ import { UserInterface } from "@/types/user";
 import { getNextWeekStartUTC } from "@/utils/date";
 
 import logo from "../../public/logo.svg";
-// import CreateRumbleButton from "../CreateRumbleButton";
+import CreateRumbleButton from "../CreateRumbleButton";
 import UserProfile from "../UserProfile";
 
 interface HeaderProps {
@@ -83,7 +83,7 @@ const Header = ({ user }: HeaderProps) => {
           <UserProfile user={user} />
         </div>
       </div>
-      {/* <CreateRumbleButton /> */}
+      <CreateRumbleButton />
     </header>
   );
 };
